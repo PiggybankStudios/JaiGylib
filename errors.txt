@@ -1,0 +1,38 @@
+^([A-Z]\:[./\_0-9A-Za-z-]+\.jai)\:(\d+)\,(\d+)\:\s*([^\n]*)$
+
+C:/Users/robbitay/Documents/MyStuff/Programs/jai/how_to/002_number_types.jai:28,14: Error: Loss of information (trying to fit 64 bits into 16 bits). Can't do this without an explicit cast. Type wanted: s16; type given: s64.
+
+    // running code in order to find the problem. We like compile-time errors.
+    i: s16 = 80000;  // This number won't fit into 16 bits. Try uncommenting this line and see.
+             ^^^^^
+
+C:/Users/robbitay/Documents/MyStuff/Programs/jai/how_to/002_number_types.jai:28,5: ... in declaration of 'i' (declared type: s16; rvalue type: s64)
+
+C:/Users/robbitay/Documents/MyStuff/Programs/jai/how_to/002_number_types.jai:29,14: Error: Number signedness mismatch. Type wanted: u32; type given: s64.
+
+    // i: s16 = 80000;  // This number won't fit into 16 bits. Try uncommenting this line and see.
+    j: u32 = -1;     // -1 is signed, so it is out of range of what a u32 can store. Try uncommenting and see.
+             ^^
+
+C:/Users/robbitay/Documents/MyStuff/Programs/jai/how_to/002_number_types.jai:29,5: ... in declaration of 'j' (declared type: u32; rvalue type: s64)
+
+C:/Users/robbitay/Documents/MyStuff/Programs/jai/how_to/003_booleans.jai:40,16: Error: Unable to parse an expression here. This looks like a C-style declaration (two identifiers in a row); maybe it's a mistake of habit? If you want to declare a variable, try "print: s;"
+
+Emacs from @arne:
+(setf
+ (alist-get 'jai compilation-error-regexp-alist-alist)
+ `(,(rx
+     ;; File
+     (group-n 1 (1+ (any alnum "\\" "/" "_" "." "-")) ".jai")
+     ":"
+     ;; Line
+     (group-n 2 (1+ digit))
+     ;; Column
+     "," (group-n 3 (1+ digit))
+     ": "
+     ;; Type -- also this parameter doesn't show up when it
+     ;; come from stacktrace
+     (or "Error:" (group-n 5 "Warning:") (group-n 6 "Info:")))
+   1 2 3 (5 . 6)))
+   
+"\(?1:[./\_[:alnum:]-]+\.jai\):\(?2:[[:digit:]]+\),\(?3:[[:digit:]]+\): \(?:Error:\|\(?5:Warning:\)\|\(?6:Info:\)\)"

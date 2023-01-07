@@ -1,0 +1,35 @@
+
+# New Feedback
+	[ ] 
+
+# Sent Jan 6th 2023
+	# Content Suggestions
+		[x] 019_looping.jai line 519
+			@ We could add an example of backwards looping over an array that prints out it_index to clarify if it_index takes on values going from 4 to 0 or from 0 to 4 (i.e. Is it an index into the array, or an index of how many times we've run through the loop)
+		[x] The default behavior of the compiler right now is to output lines like "Running linker: ..." and "Stats for Workspace 2..." when compiling. I don't see an option to disable this debug output in the "jai -help". It would be nice if this either was not the default behavior, or it was easy to find how to turn off this behavior (maybe part of it's output would be to tell you how to turn off this info)
+		[x] 005_strings.jai line 368
+			@ The comment on this line needs is a bit longer than the rest of the how_to files. May be worth splitting to 2 lines to keep a sense of max column convention
+			@ Also this example of writing of writing \r in your #string directive at the end of each line is just wrong. The \r is not interpreted as an escape sequence
+		[x] 007_struct_literals.jai line 50
+			@ This comment does not have any code following it: // And of course we can just write the type directly in the type slot of a declaration:
+		[x] 008_types.jai line 110
+			@ Another long comment that maybe could be split into multiple lines? It is to the right of a line of code, so maybe the long line is intentional
+		[x] 005_strings.jai lines 368-374
+			@ Putting \r in a #string does not actually add a carriage return character to the string. This example is wrong. #string,cr should be used instead
+		[x] Math/module.jai
+			@ Vector2, Vector3, and Vector4 would benefit from a unary negative operator overload. Something like:
+				operator - :: (vector: Vector2) -> Vector2 { return Vector2.{ -vector.x, -vector.y }; }
+		[x] There are no intrinsic wrappers for cbrt, log2f and log10f
+		[x] It would be nice if the how_tos started with some basic info about metaprograms and how to get at the full list of options in Build_Options using your own metaprogram.
+
+	# Out of Date Info
+		[x] README.txt line 14-15
+			@ There is only one program in redist folder now and it's not called winsdksetup.exe, it's called vs_BuildTools.exe
+		[x] "jai -help", near the end, says "To get started, look into Build_Options in modules/Compiler/Compiler.jai, or look at the how_to program that isn't written yet but will be eventually.)". Are either of these files the how_to program that is actually written now: 400_workspaces.jai, 420_command_line.jai
+		[x] Math/module.jai lines 499-505
+			@ Operator overloading is now supported. lerp function can be implemented in a polymorphic way
+
+	# Language or Syntax Feedback
+		[x] Syntax - Currently it's not possible to use parenthesis in a range style for loop. For example: for (0..7) { ... } doesn't work. This might just be force of habit but I like having parenthesis in my loops. Is it possible to support parenthesis around the "condition" portion of the for loop?
+		[x] When setting up my first project for testing/learning I needed to use "-output_path" so that my executable was placed in the build folder where I was calling jai from rather than in the folder where my main.jai source code was. "-output_path" is not listed when calling "jai -help", it would have been nice if it was. Someone mentioned that maybe it's more common to use this option from the workspace options using metaprogramming, I have not gotten to metaprogramming section of the how_to's yet but needed this compiler flag relatively early on in the learning/experimentation.
+#

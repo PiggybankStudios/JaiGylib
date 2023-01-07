@@ -1,0 +1,269 @@
+# Folder Modules
+	[ ] Basic
+		@ Command Line Arguments
+		@ Context Stuff like logging, assertions, default allocator, temporary storage, etc.
+		@ Struct and enum reflection functions
+		@ System time and working directory info
+		@ Format functions, String_Builder
+	[ ] Bindings_Generator
+		@ Generates jai bindings from C++ header file
+	[ ] Check
+		@ Helps check for potential problems before porting from C/C++
+	[ ] Clipboard
+		@ os_clipboard_get_text
+		@ os_clipboard_set_text
+		@ os_clipboard_set_bitmap
+		@ os_clipboard_empty
+	[ ] Code_Visit
+	[ ] Codex
+		@ Exports information about the program to a file format
+	[ ] Compiler
+		@ Compiler API. Compile-time routines to interact with the compiler.
+	[ ] Curl
+		@ Curl bindings.
+	[ ] d3d11
+		@ Bindings for DirectX 11
+	[ ] d3d12
+		@ Bindings for DirectX 12
+	[ ] d3d_compiler
+		@ Bindings for d3dcompiler_47.dll (whatever that does)
+	[ ] debug_info
+		@ A module for parsing debug information in DWARF or Codeview format.
+	[ ] dxc_compiler
+		@ I think https://github.com/microsoft/DirectXShaderCompiler
+	[ ] dxgi
+		@ Bindings for DXGI (DirectX Graphics Infrastructure)
+	[ ] executable_formats
+		@ A module for parsing COFF (Windows), ELF (Linux), and Mach-O (macOS) executables and object files, 
+	[ ] File
+		@ make_directory_if_it_does_not_exist
+		@ write_entire_file
+		@ read_entire_file
+		@ file_open
+		@ file_length
+		@ file_set_position
+		@ file_write
+		@ file_close
+		@ file_move
+		@ file_delete
+		@ file_link
+	[ ] File_Async
+		@ Like File but asynchronous. module.jai has a lot of info
+	[ ] File_Utilities
+		@ Simple utilities for manipulating files and their contents.
+		@ visit_files
+		@ file_exists
+		@ file_modtime_and_size
+		@ atomic_file_replace_or_just_rename_if_destination_file_does_not_exist
+	[ ] File_Watcher
+		@ Helps you watch for files being changed in a directory and gives you callbacks when they do
+		@ Call init(), then add_directories(), theen process_changes()
+	[ ] freetype-2.12.1
+	[ ] freetype255
+		@ Bindings for the FreeType font library.
+	[ ] Gamepad
+		@ Helper library for reading input from controllers. module.jai has lots of info
+	[ ] GetRect
+		@ A UI Library (that Jon wrote?)
+	[ ] GL
+		@ OpenGL API bindings
+	[ ] ImGui
+		@ Bindings for Dear ImGui.
+	[ ] Input
+		@ Input handler routines, platform-independent.
+	[ ] Iprof
+		@ Like Sean Barrett's IProf "Industrial Strength Profiling"
+	[ ] Keymap
+		@ Helps with binding debug keys to key-combos through a .keymap file
+	[ ] lz4-1.9.1
+		@ LZ4 compression/decompression I imagine?
+	[ ] macos
+		@ Some platform layer bindings for Mac?
+	[ ] Math
+		@ Cephes math library (intrinsics?): ceil, floor, sin, cos, sin_or_cos, atan, atan2, frexp, ldexp, sqrt, log, tan, cot, asin, acos, exp, pow, reduc, polynomial
+		@ Extra intrinsics: Clamp, abs, is_nan_is_inf, isnan, isinf, is_finite, frac, fmod_cycling, saturate, square, half_to_float, lerp, nlerp, slerp
+		@ Vector2, Vector3, Vector4, Quaternion, and Plane3
+		@ Math constants: TAU, TAU64, PI, PI64, FLOAT16_MAX, FLOAT32_MIN, FLOAT32_MAX, FLOAT32_INFINITY, FLOAT32_NAN, FLOAT64_MIN, FLOAT64_MAX, FLOAT64_INFINITY, FLOAT64_NAN, S8_MIN, S8_MAX, U8_MAX, S16_MIN, S16_MAX, U16_MAX, S32_MIN, S32_MAX, U32_MAX, S64_MIN, S64_MAX, U64_MAX, INT_TO_FLOAT32_MAX
+		@ Color math functions: srgb_to_linear, linear_to_srgb, srgb_to_linear_fast, linear_to_srgb_fast, srgb_to_linear_pow2, linear_to_srgb_sqrt
+		@ Matrix2, Matrix3, Matrix4, Matrix4x3, AnyMatrix3, AnyMatrix4x3, AnyMatrix2, AnyMatrix
+	[ ] meow_hash
+		@ This is a port of https://github.com/cmuratori/meow_hash. This is a fully functional and performant port.
+	[ ] meshoptimizer
+		@ Optimizes 3D model meshes?
+	[ ] Metal
+		@ Metal API bindings for macOS
+	[ ] MojoShader
+		@ MojoShader bindings (allows writing one set of shaders and using in D3D, OpenGL, etc. https://icculus.org/mojoshader/
+	[ ] nvidia_aftermath
+		@ Aftermath for DX11 and DX12. For debugging GPU crashes I guess
+	[ ] nvtt
+		@ Ignacio's NVIDIA Texture Tools (For texture encoding I guess?) (https://github.com/castano/nvidia-texture-tools)
+	[ ] Objective_C
+		@ Interact with macOS (e.g. NSEvent, NSTimer, etc.) with Objective-C wrappers.
+	[ ] Overwriting_Allocator
+		@ This module provides an Allocator that you can use to overwrite memory with a byte pattern when freed.
+	[ ] pl_mpeg
+		@ A straightforward port of Dominic Szablewski's PL_MPEG library from C. Allows for decoding mpeg video files!
+	[ ] POSIX
+		@ A collection of the POSIX API that is shared amongst our supported Unix-based targets
+	[ ] Process
+		@ An API to start other programs in a cross-platform way.
+	[ ] Program_Print
+		@ Invoke this module using "-plug Program_Print"
+	[ ] SDL
+		@ SDL2 bindings.
+	[ ] Shared_Memory_Channel
+		@ This is a module for communicating quickly, with other processes on the same machine, using shared memory. 
+	[ ] Simp
+		@ This is a simple framework for drawing graphics that you can use for most programs that are not too demanding. Or, you could copy this module and customize it to become what you want.
+	[ ] Simple_Package
+		@ Some sort of quick serialization/deserialization library?
+	[ ] Socket
+		@ This module is supposed to help writing cross-platform socket programs.
+	[ ] Sound_Player
+		@ Audio routines for controlling sound through channels, streams, and more.
+	[ ] stb_image
+		@ stb_image bindings.
+	[ ] stb_image_resize
+		@ stb_image_resize bindings.
+	[ ] stb_image_write
+		@ stb_image_write bindings.
+	[ ] stb_sprintf
+		@ stb_sprintf bindings.
+	[ ] stb_vorbis
+		@ stb_vorbis bindings.
+	[ ] String
+		@ Some of the more advances string manipulation functions that don't fit in Basic
+	[ ] telemetry3
+		@ Telemetry bindings (the profiling application)
+	[ ] Text_File_Handler
+		@ Text_File_Handler is a relatively simple and straightforward struct, with associated procedures, that helps you parse your own custom file format. See the examples/example.jai for a demonstration.
+	[ ] Thekla_Atlas
+		@ Thekla Atlas Generator. (https://github.com/Thekla/thekla_atlas)
+		@ This tool performs mesh segmentation, surface parameterization, and chart packing.
+		@ This is especially useful when generating light maps for meshes that do not have artist-supplied uv's.
+	[ ] Thekla_Baker
+		@ Some sort of Ambient Occlusion baker or something?
+	[ ] Thread
+		@ Platform-independent thread routines.
+	[ ] Unmapping_Allocator
+		@ This module provides an allocator that unmaps memory that is freed, so that if you ever try to reference this memory, your program will crash cleanly at the reference site.
+	[ ] Vulkan
+		@ Vulkan API bindings.
+	[ ] Window_Creation
+		@ Platform-independent window creation routines.
+	[ ] X11
+		@ X11 bindings.
+	[ ] xxHash
+		@ Non-cryptographic hash algorithm
+
+# Single Files Modules
+	[ ] Adpcm.jai
+		@ ADPCM encoder/decoder?
+	[ ] Atomics.jai
+		@ Atomic functions like atomic_swap, atomic_write, etc.
+	[ ] Autorun.jai
+		@ A simple Metaprogram_Plugin that runs your program when compilation succeeds.
+		@ Use with -plug Autorun
+	[ ] Base64_Encode.jai
+		@ base64_encode(string) -> string
+	[ ] Bit_Array.jai
+		@ A simple bit array.
+	[ ] Bit_Operations.jai
+		@ byte_swap, byte_swap_in_place, bit_scan_forward, bit_scan_reverse, popcount, bits_equal, bits_equal, first_different_byte
+	[ ] Bucket_Array.jai
+		@ Like a dynamic array but existing items don't move when adding or removing new items to the array
+	[ ] BuildCpp.jai
+		@ This module helps build C/C++ libraries and programs from jai.
+	[ ] Command_Line.jai
+		@ Used for getting arguments from the build command line?
+	[ ] Crc.jai
+		@ crc64(string) -> u64
+	[ ] Debug.jai
+		@ Various debugging aids, such as attaching oneself to a debugger, setting breakpoints, abort calls, and so on.
+	[ ] Deep_Copy.jai
+		@ Provides a Deep_Copy() function
+	[ ] Default_Metaprogram.jai
+		@ Contains the default metaprogram which parses common command line arguments and whatnot
+	[ ] Example_Plugin.jai
+		@ Shows to to make your module work with Default_Metaprogram's plugin system (define get_plugin() -> *Metaprogram_Plugin)
+	[ ] Flat_Pool.jai
+		@ This is a new, simpler version of Pool that uses the 64-bit address space to achieve that simplicity.
+	[ ] Float16.jai
+		@ A half-begun module for converting between float16 and float.
+	[ ] Hash.jai
+		@ Hash functions for short strings and small data types.
+	[ ] Hash_Table.jai
+		@ A simple hash table.
+	[ ] Icon.jai
+		@ Create .ico files from image data.
+	[ ] Ico_File.jai
+		@ A plugin to conveniently set the icon without having to make your own metaprogram.
+	[ ] IntroSort.jai
+		@ In-place intro-sort (http://ralphunden.net/?q=a-guide-to-introsort)
+	[ ] Linux.jai
+		@ Linux OS level bindings?
+	[ ] Machine_X64.jai
+		@ Useful routines for 64-bit Intel x86 machines (which we tend to call x64 in this compiler).
+	[ ] MacOS_Bundler.jai
+		@ This code helps create a macOS app (bundle) for your program
+	[ ] Mail.jai
+		@ Send plain-text or HTML e-mails, with optional CC, BCC, and attachments.
+	[ ] md5.jai
+		@ A simple MD5 utility (md5(string) -> string)
+	[ ] Metaprogram_Plugins.jai
+		@ Import this module to give you code that you can use to initialize an array of Metaprogram_Plugins, given an array of plugin names.
+	[ ] Minimal_Metaprogram.jai
+		@ This is a copy of Default_Metaprogram that doesn’t intercept messages and doesn't handle most command-line arguments.
+	[ ] PCG.jai
+		@ PCG random number generator.
+	[ ] Pool.jai
+		@ The Pool is a memory allocator that you can use when you want to quickly allocate memory blocks of many different sizes, but all those blocks will have approximately the same lifetime.
+	[ ] Preload.jai
+		@ Minimal code the compiler needs to compile user source code. Volatile!
+	[ ] Print_Color.jai
+		@ A small wrapper around OS console color commans / escape codes
+	[ ] Project_Generator.jai
+		@ Generate Visual Studio Solution files out of your program.
+	[ ] Protocol_For_Memory_Visualization.jai
+		@ allow memory visualization stuff to become kind of a standard that multiple programs can use
+		@ (but I do not recommend this yet since the protocol should stabilize first)
+	[ ] RadixSort.jai
+		@ Based on Pierre Terdiman's and Michael Herf's source code.
+		@ http://www.codercorner.com/RadixSortRevisited.htm
+		@ http://www.stereopsis.com/radix.html
+	[ ] Random.jai
+		@ This is a very simple random number generator of the MCG type.
+		@ It is from the "Today's 64-bit Minimal Standard" section of https://www.pcg-random.org/posts/does-it-beat-the-minimal-standard.html.
+	[ ] Reflection.jai
+		@ Runtime introspection of source code.
+	[ ] Runtime_Support.jai
+	[ ] Runtime_Support_Crash_Handler.jai
+	[ ] Sloppy_Math.jai
+		@ is_approximately_zero, values_are_close, values_are_close, values_are_close, max_of_type, min_of_type
+	[ ] Soa.jai
+		@ This is some SOA experimentation that is in progress.
+	[ ] Sort.jai
+		@ Sorting algorithms, such as bubble sort and quick sort.
+	[ ] System.jai
+		@ A collection of platform specific functions that are not all available on all platforms
+		@ get_username, get_home_directory, get_machinename, get_path_of_running_executable, get_number_of_processors, get_error_value, get_error_string, get_error_value_and_string
+	[ ] Tagged_Union.jai
+		@ A union with a "tag" at the front that tells us what type is stored inside
+	[ ] Unicode.jai
+		@ Maybe not used because Font.jai in Simp module already has unicode stuff
+		@ character_utf8_to_utf32, character_utf32_to_utf8, unicode_next_character, utf8_next_character
+	[ ] Wav_File.jai
+		@ For parsing wav files?
+	[ ] Window_Type.jai
+		@ This module defines the Window_Type used by Windows/X11/etc.
+	[ ] Windows.jai
+		@ Windows API bindings.
+	[ ] Windows_Registry.jai
+		@ A little confusing ... this is a Windows API interface module, but Windows_Resources, which has a very similar name, is a higher-level functionality module.
+	[ ] Windows_Resources.jai
+		@ Provides API for the windows exe resource system
+	[ ] Windows_Utf8.jai
+		@ Windows wide / utf8 conversions.
+	[ ] Zip_File_Directory.jai
+		@ This is just a simple file that I made for loading the table of contents of a zip file and returning them in an easy format.

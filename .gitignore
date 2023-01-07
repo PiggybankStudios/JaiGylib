@@ -1,0 +1,27 @@
+
+/build/*
+!build/build.bat
+!build/build_linux.sh
+
+#File Types
+*.vim
+*.a
+*.sublime-workspace
+*.obj
+*.o
+/data/*.exe
+/data/JaiGylibTest*
+/data/*.wasm
+/data/*.wat
+/data/*.html
+/data/*.css
+/data/*.js
+
+#Visual Studio Stuff
+*.VC.*
+/.vs/
+vc140.pdb
+/Debug/
+
+#Mac Stuff
+*.DS_Store
