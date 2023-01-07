@@ -3,6 +3,8 @@
 !build/build.bat
 !build/build_linux.sh
 
+/code/.build
+
 #File Types
 *.vim
 *.a
