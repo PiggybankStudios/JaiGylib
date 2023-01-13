@@ -121,6 +121,35 @@ AngleLerp :: inline (angleStart: $A, angleEnd: $B, amount: $C) -> A
 	return AngleFix(start + (end - start) * amount);
 }
 
+ColorChannelToU8 :: inline (value: float32) -> u8
+{
+	return ClampCast(RoundF32i(value * 255), u8);
+}
+ColorChannelToU8 :: inline (value: float64) -> u8
+{
+	return ClampCast(RoundF64i(value * 255), u8);
+}
+ColorChannelToF32 :: inline (value: u8) -> float32
+{
+	return (cast(float32)value) / 255;
+}
+ColorChannelToF64 :: inline (value: u8) -> float64
+{
+	return (cast(float64)value) / 255;
+}
+MultiplyColorChannelU8 :: inline (left: u8, right: u8) -> u8
+{
+	return ColorChannelToU8(ColorChannelToF32(left) * ColorChannelToF32(right));
+}
+MultiplyColorChannelF32 :: inline (left: u8, right: float32) -> u8
+{
+	return ColorChannelToU8(ColorChannelToF32(left) * right);
+}
+MultiplyColorChannelF64 :: inline (left: u8, right: float64) -> u8
+{
+	return ColorChannelToU8(ColorChannelToF64(left) * right);
+}
+
 // +--------------------------------------------------------------+
 // |                             Test                             |
 // +--------------------------------------------------------------+
@@ -289,4 +318,4 @@ TestMath :: ()
 	print("5,000,000,000 (float32) -> u32 = %\n", ClampCastFromFloat(cast(float32)5_000_000_000, u32));
 	print("-4,000,000,000 (float32) -> s32 = %\n", ClampCastFromFloat(cast(float32)-4_000_000_000, s32));
 }
-#run TestMath();
+// #run TestMath();

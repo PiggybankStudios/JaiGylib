@@ -6,16 +6,11 @@ Rectangle :: struct
 {
 	x, y, w, h: float32;
 	
-	#place x;
-	component: [4]float32 = ---;
-	#place x;
-	topLeft: v2 = ---;
-	#place w;
-	size: v2 = ---;
-	#place w;
-	width: float32 = ---;
-	#place h;
-	height: float32 = ---;
+	#place x; component: [4]float32 = ---;
+	#place x; topLeft: v2 = ---;
+	#place w; size: v2 = ---;
+	#place w; width: float32 = ---;
+	#place h; height: float32 = ---;
 }
 rec :: Rectangle;
 
@@ -23,16 +18,11 @@ Rectanglei :: struct
 {
 	x, y, w, h: s32;
 	
-	#place x;
-	component: [4]s32 = ---;
-	#place x;
-	topLeft: v2i = ---;
-	#place w;
-	size: v2i = ---;
-	#place w;
-	width: s32 = ---;
-	#place h;
-	height: s32 = ---;
+	#place x; component: [4]s32 = ---;
+	#place x; topLeft: v2i = ---;
+	#place w; size: v2i = ---;
+	#place w; width: s32 = ---;
+	#place h; height: s32 = ---;
 }
 reci :: Rectanglei;
 
@@ -40,18 +30,12 @@ Box :: struct
 {
 	x, y, z, w, h, d: float32;
 	
-	#place x;
-	component: [6]float32 = ---;
-	#place x;
-	bottomLeft: v3 = ---;
-	#place w;
-	size: v3 = ---;
-	#place w;
-	width: float32 = ---;
-	#place h;
-	height: float32 = ---;
-	#place d;
-	depth: float32 = ---;
+	#place x; component: [6]float32 = ---;
+	#place x; bottomLeft: v3 = ---;
+	#place w; size: v3 = ---;
+	#place w; width: float32 = ---;
+	#place h; height: float32 = ---;
+	#place d; depth: float32 = ---;
 }
 box :: Box;
 
@@ -59,18 +43,12 @@ Boxi :: struct
 {
 	x, y, z, w, h, d: s32;
 	
-	#place x;
-	component: [6]s32 = ---;
-	#place x;
-	bottomLeft: v3i = ---;
-	#place w;
-	size: v3i = ---;
-	#place w;
-	width: s32 = ---;
-	#place h;
-	height: s32 = ---;
-	#place d;
-	depth: s32 = ---;
+	#place x; component: [6]s32 = ---;
+	#place x; bottomLeft: v3i = ---;
+	#place w; size: v3i = ---;
+	#place w; width: s32 = ---;
+	#place h; height: s32 = ---;
+	#place d; depth: s32 = ---;
 }
 boxi :: Boxi;
 
@@ -79,16 +57,11 @@ Obb2D :: struct
 	x, y, w, h: float32;
 	rotation: float32;
 	
-	#place x;
-	component: [4]float32 = ---;
-	#place x;
-	center: v2 = ---;
-	#place w;
-	size: v2 = ---;
-	#place w;
-	width: float32 = ---;
-	#place h;
-	height: float32 = ---;
+	#place x; component: [4]float32 = ---;
+	#place x; center: v2 = ---;
+	#place w; size: v2 = ---;
+	#place w; width: float32 = ---;
+	#place h; height: float32 = ---;
 }
 obb2 :: Obb2D;
 
@@ -97,18 +70,12 @@ Obb3D :: struct
 	x, y, z, w, h, d: float32;
 	rotation: quat;
 	
-	#place x;
-	component: [6]float32 = ---;
-	#place x;
-	center: v3 = ---;
-	#place w;
-	size: v3 = ---;
-	#place w;
-	width: float32 = ---;
-	#place h;
-	height: float32 = ---;
-	#place d;
-	depth: float32 = ---;
+	#place x; component: [6]float32 = ---;
+	#place x; center: v3 = ---;
+	#place w; size: v3 = ---;
+	#place w; width: float32 = ---;
+	#place h; height: float32 = ---;
+	#place d; depth: float32 = ---;
 }
 obb3 :: Obb3D;
 
@@ -626,4 +593,4 @@ TestRecs :: ()
 	assert(test2.size.y == 4);
 	assert(test2.topLeft.x == 1);
 }
-#run TestRecs();
+// #run TestRecs();

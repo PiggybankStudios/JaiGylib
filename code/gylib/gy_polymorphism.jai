@@ -80,3 +80,8 @@ AnyNumberUpcast2 :: inline (type1: *Type, type2: *Type) -> bool
 	else if (size2 > size1) { <<type1 = <<type2; }
 	return true;
 }
+
+AnyEnum :: inline (type: Type) -> bool
+{
+	return (cast(*Type_Info)type).type == .ENUM;
+}

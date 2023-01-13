@@ -13,12 +13,9 @@ Vector2i :: struct
 {
 	x, y: s32;
 	
-	#place x;
-	component: [2]s32 = ---;
-	#place x;
-	width: s32 = ---;
-	#place y;
-	height: s32 = ---;
+	#place x; component: [2]s32 = ---;
+	#place x; width: s32 = ---;
+	#place y; height: s32 = ---;
 }
 v2i :: Vector2i;
 
@@ -26,18 +23,12 @@ Vector3i :: struct
 {
 	x, y, z: s32;
 	
-	#place x;
-	xy: Vector2i = ---;
-	#place y;
-	yz: Vector2i = ---;
-	#place x;
-	component: [3]s32 = ---;
-	#place x;
-	width: s32 = ---;
-	#place y;
-	height: s32 = ---;
-	#place z;
-	depth: s32 = ---;
+	#place x; xy: Vector2i = ---;
+	#place y; yz: Vector2i = ---;
+	#place x; component: [3]s32 = ---;
+	#place x; width: s32 = ---;
+	#place y; height: s32 = ---;
+	#place z; depth: s32 = ---;
 }
 v3i :: Vector3i;
 
@@ -45,24 +36,15 @@ Vector4i :: struct
 {
 	x, y, z, w: s32;
 	
-	#place x;
-	xy: Vector2i = ---;
-	#place y;
-	yz: Vector2i = ---;
-	#place z;
-	zw: Vector2i = ---;
-	#place x;
-	xyz: Vector3i = ---;
-	#place y;
-	yzw: Vector3i = ---;
-	#place x;
-	component: [4]s32 = ---;
-	#place x;
-	width: s32 = ---;
-	#place y;
-	height: s32 = ---;
-	#place z;
-	depth: s32 = ---;
+	#place x; xy: Vector2i = ---;
+	#place y; yz: Vector2i = ---;
+	#place z; zw: Vector2i = ---;
+	#place x; xyz: Vector3i = ---;
+	#place y; yzw: Vector3i = ---;
+	#place x; component: [4]s32 = ---;
+	#place x; width: s32 = ---;
+	#place y; height: s32 = ---;
+	#place z; depth: s32 = ---;
 }
 v4i :: Vector4i;
 
@@ -201,6 +183,8 @@ ToVec2 :: (vector: v2i) -> v2 { return v2.{ cast(float32)vector.x, cast(float32)
 ToVec3 :: (vector: v3i) -> v3 { return v3.{ cast(float32)vector.x, cast(float32)vector.y, cast(float32)vector.z }; }
 ToVec4 :: (vector: v4i) -> v4 { return v4.{ cast(float32)vector.x, cast(float32)vector.y, cast(float32)vector.z, cast(float32)vector.w }; }
 
+ToVec4 :: (quaternion: quat) -> v4 { return v4.{ quaternion.x, quaternion.y, quaternion.z, quaternion.w }; }
+
 // +--------------------------------------------------------------+
 // |                Operator Overload Equivalents                 |
 // +--------------------------------------------------------------+
@@ -239,7 +223,9 @@ Vec2iEqual :: (left: v2i, right: v2i) -> bool { return (left.x == right.x && lef
 Vec3iEqual :: (left: v3i, right: v3i) -> bool { return (left.x == right.x && left.y == right.y && left.z == right.z); }
 Vec4iEqual :: (left: v4i, right: v4i) -> bool { return (left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w); }
 
-//TODO: Add Vec2BasicallyEqual, Vec3BasicallyEqual, Vec4BasicallyEqual
+Vec2BasicallyEqual :: (left: v2, right: v2, epsilon: float32 = DEFAULT_EPSILON) -> bool { return (BasicallyEqual(left.x, right.x, epsilon) && BasicallyEqual(left.y, right.y, epsilon)); }
+Vec3BasicallyEqual :: (left: v3, right: v3, epsilon: float32 = DEFAULT_EPSILON) -> bool { return (BasicallyEqual(left.x, right.x, epsilon) && BasicallyEqual(left.y, right.y, epsilon) && BasicallyEqual(left.z, right.z, epsilon)); }
+Vec4BasicallyEqual :: (left: v4, right: v4, epsilon: float32 = DEFAULT_EPSILON) -> bool { return (BasicallyEqual(left.x, right.x, epsilon) && BasicallyEqual(left.y, right.y, epsilon) && BasicallyEqual(left.z, right.z, epsilon) && BasicallyEqual(left.w, right.w, epsilon)); }
 
 // +--------------------------------------------------------------+
 // |                       Math Operations                        |
@@ -279,8 +265,10 @@ Vec4iAbs :: (vector: v4i) -> v4i { return v4i.{ abs(vector.x), abs(vector.y), ab
 
 Vec2Dot  :: (left: v2,  right: v2)  -> float32 { return (left.x * right.x) + (left.y * right.y); }
 Vec3Dot  :: (left: v3,  right: v3)  -> float32 { return (left.x * right.x) + (left.y * right.y) + (left.z * right.z); }
+Vec4Dot  :: (left: v4,  right: v4)  -> float32 { return (left.x * right.x) + (left.y * right.y) + (left.z * right.z) + (left.w * right.w); }
 Vec2iDot :: (left: v2i, right: v2i) -> s32 { return (left.x * right.x) + (left.y * right.y); }
 Vec3iDot :: (left: v3i, right: v3i) -> s32 { return (left.x * right.x) + (left.y * right.y) + (left.z * right.z); }
+Vec4iDot :: (left: v4i, right: v4i) -> s32 { return (left.x * right.x) + (left.y * right.y) + (left.z * right.z) + (left.w * right.w); }
 
 Vec2Length  :: (vector: v2)  -> float32 { return sqrt(vector.x*vector.x + vector.y*vector.y); }
 Vec3Length  :: (vector: v3)  -> float32 { return sqrt(vector.x*vector.x + vector.y*vector.y + vector.z*vector.z); }

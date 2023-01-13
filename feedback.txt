@@ -1,5 +1,7 @@
 
 # New Feedback
+	[ ] 160_type_restrictions.jai line 391
+		@ names_are_consonanty doesn't need the "name" parameter because it's not used at all in the function body. Calling site on line 386 doesn't need to pass "rezrov"
 	[ ] 
 
 # Sent Jan 6th 2023

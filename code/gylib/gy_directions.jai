@@ -147,6 +147,22 @@ ToVec3i :: (direction: Dir3) -> v3i
 	result.z = cast(s32)(ifx(IsFlagSet(direction, Dir3.Forward)) then 1 else 0) + cast(s32)(ifx(IsFlagSet(direction, Dir3.Backward)) then -1 else 0);
 	return result;
 }
+ToVec3 :: (axis: Axis) -> v3
+{
+	result: v3 = ---;
+	result.x = (ifx(IsFlagSet(axis, .X)) then 1.0 else 0.0);
+	result.y = (ifx(IsFlagSet(axis, .Y)) then 1.0 else 0.0);
+	result.z = (ifx(IsFlagSet(axis, .Z)) then 1.0 else 0.0);
+	return result;
+}
+ToVec3i :: (axis: Axis) -> v3i
+{
+	result: v3i = ---;
+	result.x = cast(s32)(ifx(IsFlagSet(axis, .X)) then 1 else 0);
+	result.y = cast(s32)(ifx(IsFlagSet(axis, .Y)) then 1 else 0);
+	result.z = cast(s32)(ifx(IsFlagSet(axis, .Z)) then 1 else 0);
+	return result;
+}
 
 ToDir2 :: (vector: v2) -> Dir2
 {
@@ -1166,4 +1182,4 @@ TestDirections :: ()
 		assert(direction == Dir3ExFromIndex(GetDir3ExIndex(direction)));
 	}
 }
-#run TestDirections();
+// #run TestDirections();

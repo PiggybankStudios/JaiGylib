@@ -1,106 +1,73 @@
 
 #import "Basic";
 #import "Math";
+#import "Hash_Table";
 
-#import "gylib" (DEBUG_BUILD = true, ASSERT_FAILURE_FUNC = AssertionFailure);
+#import "gylib" (
+	DEBUG_BUILD = false,
+	ASSERT_FAILURE_FUNC = AssertionFailure,
+	DEBUG_OUTPUT_FUNC = GylibDebugOutput,
+	DEBUG_OUTPUT_LVL_PREFIX = false);
 
-#if OS == .WINDOWS { #import "Windows"; }
-else { #import "POSIX"; }
-WaitForInput :: ()
+TaggedStruct :: struct @Taylor
 {
-    buffer: [10] u8;
-    while (true)
-    {
-		#if (OS == .WINDOWS)
-		{
-			bytes_read: u32;
-			success := ReadFile(GetStdHandle(STD_INPUT_HANDLE), buffer.data, cast(u32)buffer.count, *bytes_read, null);
-	    }
-	    else
-	    {
-			bytes_read := read(STDIN_FILENO, buffer.data, cast(u64)buffer.count);
-		}
-		if (bytes_read != 0) { break; }
-	}
+	placeholder: v2;
 }
-
-DbgLevel_t :: enum
-{
-	None :: 0;
-	Debug;
-	Info;
-	Notify;
-	Other;
-	Warning;
-	Error;
-}
-
-DebugOutput :: (dbgLevel: DbgLevel_t, message: string, doNewLine: bool)
-{
-	log(message);
-	if (doNewLine) { log("\n"); }
-	#if (OS == .WINDOWS)
-	{
-		if (IsDebuggerPresent())
-		{
-			OutputDebugStringA(temp_c_string(message));
-			if (doNewLine) { OutputDebugStringA("\n"); }
-		}
-	}
-}
-
-Write_D :: (message: string) { DebugOutput(.Debug, message, false); }
-WriteLine_D :: (message: string) { DebugOutput(.Debug, message, true); }
 
 main :: ()
 {
-	init_time();
-	log("After get_time(): %\n", get_time());
+	context.print_style.default_format_struct.use_long_form_if_more_than_this_many_members = -1;
+	context.print_style.default_format_struct.use_newlines_if_long_form = true;
 	
-	log("type_of(AssertionFailure): %\n", type_of(AssertionFailure));
+	taggedStruct: TaggedStruct;
+	
+	init_time();
+	PrintLine_D("After get_time(): %", get_time());
+	
+	PrintLine_D("type_of(AssertionFailure): %", type_of(AssertionFailure));
 	
 	test := SignOf(-HalfPi64);
 	
-	log("This is a log!\n");
+	PrintLine_D("This is a log!");
 	
 	WriteLine_D("Hello from jai!");
-	log("get_time(): %\n", get_time());
-	log("get_system_time(): %\n", get_system_time());
-	log("get_system_time(true): %\n", get_system_time(true)); //local time
+	PrintLine_D("get_time(): %", get_time());
+	PrintLine_D("get_system_time(): %", get_system_time());
+	PrintLine_D("get_system_time(true): %", get_system_time(true)); //local time
 	
 	myVar := 0;
 	while (myVar < 10)
 	{
 		defer myVar += 1;
-		log("myVar: %\n", myVar);
+		PrintLine_D("myVar: %", myVar);
 	}
 	
 	for 0..7
 	{
-		log("it: %\n", it);
+		PrintLine_D("it: %", it);
 	}
 	
 	myInt: int = 10;
 	if (myInt) ==
 	{
-		case 0;  log("It's 0!\n");
-		case 1;  log("It's 1 :D\n");
-		case 10; log("It's ten...\n");
-		case;    log("It's %.\n", myInt);
+		case 0;  PrintLine_D("It's 0!");
+		case 1;  PrintLine_D("It's 1 :D");
+		case 10; PrintLine_D("It's ten...");
+		case;    PrintLine_D("It's %.", myInt);
 	}
 	
 	// cwd := #insert get_working_directory();
-	// log("cwd: %\n", cwd);
+	// PrintLine_D("cwd: %", cwd);
 	
-	log("Dir3_NotRight: %\n", formatInt(cast(u64)Dir3_NotRight, base=16, minimum_digits=8));
+	PrintLine_D("Dir3_NotRight: %", formatInt(cast(u64)Dir3_NotRight, base=16, minimum_digits=8));
 	pi1 := Pi32;
-	log("Pi32: %\n", formatFloat(pi1, trailing_width=25));
-	log("Pi32: %\n", formatInt(<<cast(*u32)(*pi1), base=16));
+	PrintLine_D("Pi32: %", formatFloat(pi1, trailing_width=25));
+	PrintLine_D("Pi32: %", formatInt(<<cast(*u32)(*pi1), base=16));
 	pi2 := Pi64;
-	log("Pi64: %\n", formatFloat(pi2, trailing_width=25));
-	log("Pi64: %\n", formatInt(<<cast(*u64)(*pi2), base=16));
+	PrintLine_D("Pi64: %", formatFloat(pi2, trailing_width=25));
+	PrintLine_D("Pi64: %", formatInt(<<cast(*u64)(*pi2), base=16));
 	
-	log("ToVec2(Dir2.Up|.Right): %\n", ToVec2(Dir2.Up|.Right));
+	PrintLine_D("ToVec2(Dir2.Up|.Right): %", ToVec2(Dir2.Up|.Right));
 	
 	struct1 :: struct { x, y: float32; }
 	struct2 :: struct { x, y: s32; }
@@ -108,21 +75,48 @@ main :: ()
 	// testFrom: s8 = 127;
 	// testTo: s8 = Transmute(testFrom, s8);
 	// testTo := SafeCastInt(testFrom, u8);
-	// print("% cast from % to % is %\n", testFrom, type_of(testFrom), type_of(testTo), testTo);
+	// PrintLine_D("% cast from % to % is %", testFrom, type_of(testFrom), type_of(testTo), testTo);
 	
-	
+	// Assert(false && "This is wonderful!");
+	// NotNull(null);
 	
 	// test1: struct1;
 	// test1.x = 100.5;
 	// test1.y = 0.2;
 	// test2 := Transmute(test, struct2);
 	
-	WriteLine_D("\nProgram is finished...");
-    WaitForInput();
+	ComplexStruct :: struct
+	{
+		vector: v2;
+		vectorPntr: *v2;
+	}
+	myTestStruct: ComplexStruct;
+	myTestStruct.vector = NewVec2(2, 1.5);
+	myTestStruct.vectorPntr = *myTestStruct.vector;
+	
+	PrintLine_D("%", myTestStruct);
+	PrintLine_D("% is %", ComplexStruct, cast(*Type_Info)ComplexStruct);
+	
+	myEnumValue: DbgLevel;
+	
+	for 0..100
+	{
+		print("%, %\n", it/10.0, Log2F32(it/10.0));
+	}
+	
+	WriteLine_D("");
+	WriteLine_D("Program is finished...");
+	DebugWaitForStdInput();
 }
 
-AssertionFailure :: (message: string) -> bool
+GylibDebugOutput :: (message: string)
 {
-	WriteLine_D("An assertion failed!");
+	// WriteToStdOutput("[captured] ");
+	WriteToStdOutput(message);
+}
+
+AssertionFailure :: (message: string, callString: string) -> bool
+{
+	PrintLine_D("An assertion failed! % is not true!", callString);
 	return false;
 }

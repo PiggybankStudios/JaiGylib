@@ -1,10 +1,3 @@
-[ ] gy_colors.h
-[ ] gy_standard_colors.h
-[ ] Finish gy_intrinsics.h
-[ ] gy_quaternions.h
-[ ] gy_matrices.h
-[ ] gy_rays.h
-[ ] gy_easing.h
 [ ] gy_bezier.h
 [ ] gy_hash.h
 [ ] gy_memory.h
@@ -19,7 +12,6 @@
 [ ] gy_bucket_array.h
 [ ] gy_collision.h
 [ ] gy_cyclic_functions.h
-[ ] gy_debug.h
 [ ] gy_defines_check.h
 [ ] gy_extras.h
 [ ] gy_linked_list.h
@@ -40,11 +32,26 @@
 [?] gy_basic_macros.h
 [?] gy.h
 
+[ ] Modify a tagged struct?
+
+[X] gy_rays.h
+[X] gy_standard_colors.h
+[X] gy_quaternions.h
+[X] gy_matrices.h
+[X] gy_colors.h
+(X) gy_debug.h
+(X) gy_easing.h
+[X] Make a polymorphic struct?
+[X] Read some how_tos
+[X] Finish gy_intrinsics.h
 [X] gy_directions.h
 [X] Turn gylib into a proper module
 [X] gy_assert.h
 [x] gy_rectangles.h
 [x] gy_vectors.h
+
+# Line Counts
+	[ ] 2,756 - Jan 7th 2023
 
 # jai -help
 	Available Command-Line Arguments:
