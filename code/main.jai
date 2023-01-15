@@ -14,10 +14,20 @@ TaggedStruct :: struct @Taylor
 	placeholder: v2;
 }
 
+mainMemory: [64 * 1024]u8;
+
 main :: ()
 {
 	context.print_style.default_format_struct.use_long_form_if_more_than_this_many_members = -1;
 	context.print_style.default_format_struct.use_newlines_if_long_form = true;
+	
+	mainHeap: MemArena;
+	InitMemArena_FixedHeap(*mainHeap, mainMemory.count, mainMemory.data);
+	mainHeapAllocator := MemArenaGetAllocator(*mainHeap);
+	PrintLine_D("mainHeapAllocator: %\n", mainHeapAllocator);
+	SetMemArenaAsAllocator(*mainHeap);
+	
+	Assert(TryGetMemArenaForAllocator(context.allocator) == *mainHeap);
 	
 	taggedStruct: TaggedStruct;
 	
@@ -34,6 +44,8 @@ main :: ()
 	PrintLine_D("get_time(): %", get_time());
 	PrintLine_D("get_system_time(): %", get_system_time());
 	PrintLine_D("get_system_time(true): %", get_system_time(true)); //local time
+	
+	PrintLine_D("mainHeap.used: %/%", mainHeap.used, mainHeap.size);
 	
 	myVar := 0;
 	while (myVar < 10)
@@ -85,6 +97,8 @@ main :: ()
 	// test1.y = 0.2;
 	// test2 := Transmute(test, struct2);
 	
+	PrintLine_D("mainHeap.used: %/%", mainHeap.used, mainHeap.size);
+	
 	ComplexStruct :: struct
 	{
 		vector: v2;
@@ -104,6 +118,8 @@ main :: ()
 		print("%, %\n", it/10.0, Log2F32(it/10.0));
 	}
 	
+	PrintLine_D("mainHeap.used: %/%", mainHeap.used, mainHeap.size);
+	
 	WriteLine_D("");
 	WriteLine_D("Program is finished...");
 	DebugWaitForStdInput();
@@ -120,3 +136,9 @@ AssertionFailure :: (message: string, callString: string) -> bool
 	PrintLine_D("An assertion failed! % is not true!", callString);
 	return false;
 }
+
+TestThings :: ()
+{
+	// print("Context: %\n", context);
+}
+#run TestThings();

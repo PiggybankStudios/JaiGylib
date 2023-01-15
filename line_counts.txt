@@ -1,0 +1,135 @@
+# Gylib
+	=================================================================================================================================
+	 Language                                                               Files        Lines         Code     Comments       Blanks
+	=================================================================================================================================
+	 C Header                                                                  54        29666        22589         5160         1917
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\stdbool.h                           30            8           16            6
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\stdio.h                            213          156           19           38
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\math.h                             464          329           29          106
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\stdint.h                           372          207          125           40
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\string.h                           678          542           65           71
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\stddef.h                            47           19           21            7
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\stdarg.h                            33            8           20            5
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\limits.h                           196          131           40           25
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\stdlib.h                           831          636           92          103
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\ctype.h                            123           69           35           19
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_word_tree.h                         226          164           38           24
+	 C:\gamedev\projects\PigParts\lib\include\gylib\std\float.h                            177           57          100           20
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_types.h                             194           79           96           19
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_triangulation.h                     424          322           62           40
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_test_floatscan.h                    540          441           45           54
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_variable_array.h                    574          406          106           62
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_time.h                              496          335          116           45
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_vectors.h                          1695         1290          354           51
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_str_hash_dictionary.h               362          262           58           42
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_unicode.h                           509          385          100           24
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_std.h                               116           71           37            8
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_rays.h                               86           55           25            6
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_sorting.h                           259          190           50           19
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_string_fifo.h                       800          630          108           62
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_standard_colors.h                   817          498          289           30
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_quaternions.h                       363          273           66           24
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_noise.h                             164          114           25           25
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_random.h                            309          214           73           22
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_primitives.h                       1073          862          144           67
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_math.h                              303          245           40           18
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_linked_list.h                       488          396           56           36
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_rectangles.h                       2930         2520          337           73
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_hash.h                               58           31           21            6
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_lookup.h                           1053         1026           21            6
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_matrices.h                          641          498           87           56
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_extras.h                             91           58           22           11
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_string.h                           1821         1647          115           59
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_parsing.h                           951          686          231           34
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_defines_check.h                      70           42           18           10
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_intrinsics.h                       1353         1008          282           63
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_debug.h                             129           68           48           13
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_easing.h                            685          401          237           47
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_collision.h                         342          287           29           26
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_basis_vectors.h                     154          101           41           12
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_basic_macros.h                      153           63           75           15
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_bezier.h                            622          501           94           27
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_audio.h                             250          116          128            6
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_colors.h                            807          641          101           65
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy.h                                    56           44            8            4
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_memory.h                           1915         1423          341          151
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_assert.h                            201           93           85           23
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_bucket_array.h                      715          591           88           36
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_cyclic_functions.h                  407          314           77           16
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_directions.h                       1300         1036          224           40
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C++                                                                        1          105           42           51           12
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C:\gamedev\projects\PigParts\lib\include\gylib\gy_temp_memory.cpp                     105           42           51           12
+	=================================================================================================================================
+	 Total                                                                     55        29771        22631         5211         1929
+	=================================================================================================================================
+                                                                                                                                 
+#JaiGylib                                                                                 
+	=================================================================================================================================
+	 Language                                                               Files        Lines         Code     Comments       Blanks
+	=================================================================================================================================
+	 Batch                                                                      1           40           32            0            8
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C:\gamedev\projects\JaiGylib\build\build.bat                                           40           32            0            8
+	---------------------------------------------------------------------------------------------------------------------------------
+	 JAI                                                                       21         6400         5179          668          553
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_rays.jai                                    36           20            9            7
+	 C:\gamedev\projects\JaiGylib\code\gylib\module.jai                                     36           33            0            3
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_standard_colors.jai                        298          273           13           12
+	 C:\gamedev\projects\JaiGylib\code\main.jai                                            122           82           13           27
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_rectangles.jai                             596          438           94           64
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_vectors.jai                                520          430           31           59
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_random.jai                                  17           10            2            5
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_polymorphism.jai                            87           77            3            7
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_quaternions.jai                            201          142           39           20
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_matrices.jai                               532          458           33           41
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_intrinsics.jai                             582          445           66           71
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_math.jai                                   321          276           20           25
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_constants.jai                               25           17            2            6
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_easing.jai                                 600          383          161           56
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_debug.jai                                  105           87            5           13
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_compile_time.jai                            88           77            5            6
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_directions.jai                            1185         1082           67           36
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_bezier.jai                                 268          191           51           26
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_assert.jai                                  60           51            1            8
+	 C:\gamedev\projects\JaiGylib\code\gylib\gy_colors.jai                                 567          456           52           59
+	 C:\gamedev\projects\JaiGylib\code\build.jai                                           154          151            1            2
+	---------------------------------------------------------------------------------------------------------------------------------
+	 Shell                                                                      1           31           19            4            8
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C:\gamedev\projects\JaiGylib\build\build_linux.sh                                      31           19            4            8
+	---------------------------------------------------------------------------------------------------------------------------------
+	 Plain Text                                                                 2           75            0           62           13
+	---------------------------------------------------------------------------------------------------------------------------------
+	 C:\gamedev\projects\JaiGylib\feedback.txt                                              37            0           33            4
+	 C:\gamedev\projects\JaiGylib\errors.txt                                                38            0           29            9
+	=================================================================================================================================
+	 Total                                                                     25         6546         5230          734          582
+	=================================================================================================================================
+
+# Comparisons
+	//                  Jai       C++
+	gy_rays              20        55
+	gy_standard_colors  273       498
+	gy_rectangles       438      2520
+	gy_vectors          430      1290
+	gy_random            10       214!
+	gy_polymorphism      77         -
+	gy_quaternions      142       273
+	gy_matrices         458       498
+	gy_intrinsics       445      1008*
+	gy_math             276       245*
+	gy_constants         17         -
+	gy_easing           383       401
+	gy_debug             87        68
+	gy_compile_time      77         -
+	gy_directions      1082      1036
+	gy_bezier           191       501!
+	gy_assert            51        93
+	gy_colors           456       641
+	total                  5230     22631
+		* = This files has been split into other files, it's not 1:1
+		! - This file is not fully implemented yet in jai

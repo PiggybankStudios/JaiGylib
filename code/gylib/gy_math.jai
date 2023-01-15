@@ -24,6 +24,7 @@ FractionalPart :: inline (value: $T) -> T #modify { return AnyFloat(T); } { retu
 IsFlagSet :: inline (field: $T, bit: T) -> bool #expand { return ((field & bit) != 0); }
 FlagSet   :: inline (field: *$T, bit: T) #expand { <<field |= bit; }
 FlagUnset :: inline (field: *$T, bit: T) #expand { <<field &= ~bit; }
+FlagSetTo :: inline (field: *$T, bit: T, newValue: bool) #expand { if (newValue) { FlagSet(field, bit); } else { FlagUnset(field, bit); } }
 
 //TODO: Do we want to add FlagsDiff? I don't think we actually use it
 
@@ -149,6 +150,35 @@ MultiplyColorChannelF64 :: inline (left: u8, right: float64) -> u8
 {
 	return ColorChannelToU8(ColorChannelToF64(left) * right);
 }
+
+IncrementU8  :: inline (variable: *u8)  { if ((<<variable) < 0xFF)               { (<<variable) += 1; } else { (<<variable) = 0xFF;               } }
+IncrementU16 :: inline (variable: *u16) { if ((<<variable) < 0xFFFF)             { (<<variable) += 1; } else { (<<variable) = 0xFFFF;             } }
+IncrementU32 :: inline (variable: *u32) { if ((<<variable) < 0xFFFFFFFF)         { (<<variable) += 1; } else { (<<variable) = 0xFFFFFFFF;         } }
+IncrementU64 :: inline (variable: *u64) { if ((<<variable) < 0xFFFFFFFFFFFFFFFF) { (<<variable) += 1; } else { (<<variable) = 0xFFFFFFFFFFFFFFFF; } }
+Increment    :: inline (variable: *$T) #modify { return AnyUnsigned(T); }
+{
+	#if      (T == u8)  { IncrementU8(variable);  }
+	else #if (T == u16) { IncrementU16(variable); }
+	else #if (T == u32) { IncrementU32(variable); }
+	else #if (T == u64) { IncrementU64(variable); }
+	else { #assert(false); }
+}
+
+IncrementU8By  :: inline (variable: *u8,  amount: u8)  { if ((<<variable) < 0xFF               - amount) { (<<variable) += amount; } else { (<<variable) = 0xFF;               } }
+IncrementU16By :: inline (variable: *u16, amount: u16) { if ((<<variable) < 0xFFFF             - amount) { (<<variable) += amount; } else { (<<variable) = 0xFFFF;             } }
+IncrementU32By :: inline (variable: *u32, amount: u32) { if ((<<variable) < 0xFFFFFFFF         - amount) { (<<variable) += amount; } else { (<<variable) = 0xFFFFFFFF;         } }
+IncrementU64By :: inline (variable: *u64, amount: u64) { if ((<<variable) < 0xFFFFFFFFFFFFFFFF - amount) { (<<variable) += amount; } else { (<<variable) = 0xFFFFFFFFFFFFFFFF; } }
+IncrementBy    :: inline (variable: *$T, amount: T) #modify { return AnyUnsigned(T); }
+{
+	#if      (T == u8)  { IncrementU8By(variable, amount);  }
+	else #if (T == u16) { IncrementU16By(variable, amount); }
+	else #if (T == u32) { IncrementU32By(variable, amount); }
+	else #if (T == u64) { IncrementU64By(variable, amount); }
+	else { #assert(false); }
+}
+
+Decrement   :: inline (variable: *$T)            #modify { return AnyUnsigned(T); } { if ((<<variable) > 0)      { (<<variable) -= 1;      } else { (<<variable) = 0; } }
+DecrementBy :: inline (variable: *$T, amount: T) #modify { return AnyUnsigned(T); } { if ((<<variable) > amount) { (<<variable) -= amount; } else { (<<variable) = 0; } }
 
 // +--------------------------------------------------------------+
 // |                             Test                             |

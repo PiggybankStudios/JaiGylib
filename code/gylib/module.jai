@@ -34,3 +34,4 @@ else { #import "POSIX"; }
 #load "gy_standard_colors.jai";
 #load "gy_rays.jai";
 #load "gy_bezier.jai";
+#load "gy_memory.jai";

@@ -1,4 +1,6 @@
 
+//TODO: Somehow we'd like these assertions to work at compile time as well. Maybe there is some way to do #if compile_time() ??
+
 MyBreak :: Debug.abort;
 MyDebugBreak :: () { #if DEBUG_BUILD { MyBreak(); } }
 
@@ -44,6 +46,9 @@ Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 	else { Assert_(condition, message, call); }
 }
 DebugAssert :: (condition: bool, message: string = "", call := #caller_code) #expand { #if DEBUG_BUILD { Assert(condition, message, call); } }
+
+AssertIf :: (precondition: bool, expression: bool, message: string = "", call := #caller_code) #expand { if (precondition) { Assert(expression, message, call); } }
+AssertIf_ :: (precondition: bool, expression: bool, message: string = "", call := #caller_code) #expand { if (precondition) { Assert_(expression, message, call); } }
 
 //TODO: Do we want an optional message parameter in these variants?
 NotNull :: (pointer: *void, call := #caller_code) #expand { Assert(pointer != null, "", call); }

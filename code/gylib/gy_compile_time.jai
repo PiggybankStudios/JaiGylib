@@ -3,6 +3,11 @@
 // provide functions that serve a variety of types. It may also use AST walks to
 // generate functions that serve information about a variety of times.
 
+ClearPointer :: (pointer: *$T)
+{
+	memset(pointer, 0x00, size_of(T));
+}
+
 //These enum functions are really NOT using compile-time features. They are just new things I used to not be able to do so I don't know where to put them
 IsValidEnumValue :: (enumValue: $T) -> bool
 #modify { return AnyEnum(T); }
@@ -85,4 +90,17 @@ EnumFromIndex :: ($enumType: Type, index: u64) -> enumType
 {
 	enumValues := enum_values_as_s64(enumType);
 	return cast(enumType)enumValues[index % cast(u64)enumValues.count];
+}
+
+FirstEnumValue :: ($enumType: Type) -> enumType
+#modify { return AnyEnum(enumType); }
+{
+	return cast(enumType)enum_values_as_s64(enumType)[0];
+}
+
+LastEnumValue :: ($enumType: Type) -> enumType
+#modify { return AnyEnum(enumType); }
+{
+	values := enum_values_as_s64(enumType);
+	return cast(enumType)values[values.count - 1];
 }

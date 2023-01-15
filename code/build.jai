@@ -101,6 +101,7 @@ build :: ()
 			// 	{
 			// 		print("Found Taylor on struct: %!!\n", <<it.expression);
 			// 		structure: *Code_Struct = it.expression;
+			// 		// #insert,scope(structure.block) "insertedVar: float32;";
 			// 		for structure.block.members
 			// 		{
 			// 			print("\tStruct has member: %\n", <<it);
