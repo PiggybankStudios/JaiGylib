@@ -1,8 +1,12 @@
 
 //TODO: Somehow we'd like these assertions to work at compile time as well. Maybe there is some way to do #if compile_time() ??
 
-MyBreak :: Debug.abort;
-MyDebugBreak :: () { #if DEBUG_BUILD { MyBreak(); } }
+MyBreak :: inline ()
+{
+	if #compile_time { debug_break(); }
+	else { Debug.abort(); }
+}
+MyDebugBreak :: inline () { #if DEBUG_BUILD { MyBreak(); } }
 
 Assert_ :: (condition: bool, message: string = "", call := #caller_code) #expand
 {
@@ -50,14 +54,13 @@ DebugAssert :: (condition: bool, message: string = "", call := #caller_code) #ex
 AssertIf :: (precondition: bool, expression: bool, message: string = "", call := #caller_code) #expand { if (precondition) { Assert(expression, message, call); } }
 AssertIf_ :: (precondition: bool, expression: bool, message: string = "", call := #caller_code) #expand { if (precondition) { Assert_(expression, message, call); } }
 
-//TODO: Do we want an optional message parameter in these variants?
-NotNull :: (pointer: *void, call := #caller_code) #expand { Assert(pointer != null, "", call); }
-NotNull2 :: (pointer1: *void, pointer2: *void, call := #caller_code) #expand { Assert(pointer1 != null && pointer2 != null, "", call); }
-NotNull3 :: (pointer1: *void, pointer2: *void, pointer3: *void, call := #caller_code) #expand { Assert(pointer1 != null && pointer2 != null && pointer3 != null, "", call); }
+NotNull  :: (pointer: $T, message: string = "", call := #caller_code) #expand { Assert(pointer != null, message, call); }
+NotNull2 :: (pointer1: $A, pointer2: $B, message: string = "", call := #caller_code) #expand { Assert(pointer1 != null && pointer2 != null, message, call); }
+NotNull3 :: (pointer1: $A, pointer2: $B, pointer3: $C, message: string = "", call := #caller_code) #expand { Assert(pointer1 != null && pointer2 != null && pointer3 != null, message, call); }
 
-NotNull_ :: (pointer: *void, call := #caller_code) #expand { Assert_(pointer != null, "", call); }
-NotNull2_ :: (pointer1: *void, pointer2: *void, call := #caller_code) #expand { Assert_(pointer1 != null && pointer2 != null, "", call); }
-NotNull3_ :: (pointer1: *void, pointer2: *void, pointer3: *void, call := #caller_code) #expand { Assert_(pointer1 != null && pointer2 != null && pointer3 != null, "", call); }
+NotNull_  :: (pointer: $T, message: string = "", call := #caller_code) #expand { Assert_(pointer != null, message, call); }
+NotNull2_ :: (pointer1: $A, pointer2: $B, message: string = "", call := #caller_code) #expand { Assert_(pointer1 != null && pointer2 != null, message, call); }
+NotNull3_ :: (pointer1: $A, pointer2: $B, pointer3: $C, message: string = "", call := #caller_code) #expand { Assert_(pointer1 != null && pointer2 != null && pointer3 != null, message, call); }
 
 Unimplemented  :: () { Assert(false, "This code path is unimplemented!"); }
 Unimplemented_ :: () { Assert_(false, "This code path is unimplemented!"); }

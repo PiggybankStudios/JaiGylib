@@ -3,8 +3,8 @@
 // |                            Types                             |
 // +--------------------------------------------------------------+
 
-//TODO: Can we somehow do the equivalent of typedefing AllocationFunction_f and FreeFunction_f
-// Allocator_Proc :: #type (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void, allocator_data: *void) -> *void;
+AllocationFunction :: #type (numBytes: u64) -> (allocation: *void);
+FreeFunction       :: #type (allocPntr: *void) -> void;
 
 MemArenaType :: enum
 {
@@ -33,7 +33,7 @@ MemArenaFlag :: enum_flags u16
 	TelemetryEnabled;
 	SingleAlloc;
 	AutoFreePages;
-	Unused; //Replace me!
+	IsTempMemArena;
 	BreakOnAlloc;
 	BreakOnFree;
 	BreakOnRealloc;
@@ -82,8 +82,8 @@ MemArena :: struct
 	headerPntr: *void;
 	mainPntr: *void;
 	otherPntr: *void;
-	allocFunc: (u64) -> *void;
-	freeFunc: (*void) -> void;
+	allocFunc: AllocationFunction;
+	freeFunc: FreeFunction;
 	sourceArena: *MemArena;
 	
 	#place mainPntr; mainBytePntr: *u8;
@@ -96,10 +96,10 @@ MemArena :: struct
 // +--------------------------------------------------------------+
 // |                        Init Functions                        |
 // +--------------------------------------------------------------+
-InitMemArena_Redirect :: (arena: *MemArena, allocFunc: (u64) -> *void, freeFunc: (*void) -> void)
+InitMemArena_Redirect :: (arena: *MemArena, allocFunc: AllocationFunction, freeFunc: FreeFunction)
 {
 	NotNull(arena);
-	// NotNull(allocFunc); //TODO: Can a function typed variable be null in this language??
+	NotNull(xx allocFunc); //TODO: Can a function typed variable be null in this language??
 	ClearPointer(arena);
 	arena.type = .Redirect;
 	arena.allocFunc = allocFunc;
@@ -156,8 +156,9 @@ InitMemArena_FixedHeap :: (arena: *MemArena, size: u64, memoryPntr: *void, align
 	arena.highUsedMark = arena.used;
 	arena.highAllocMark = arena.numAllocations;
 }
-InitMemArena_PagedHeapFuncs :: (arena: *MemArena, pageSize: u64, allocFunc: (u64) -> *void, freeFunc: (*void) -> void, maxNumPages: u64 = 0, alignment := AllocAlignment.None)
+InitMemArena_PagedHeapFuncs :: (arena: *MemArena, pageSize: u64, allocFunc: AllocationFunction, freeFunc: FreeFunction, maxNumPages: u64 = 0, alignment := AllocAlignment.None)
 {
+	NotNull2(xx allocFunc, xx freeFunc);
 	ClearPointer(arena);
 	arena.type = .PagedHeap;
 	arena.alignment = alignment;
@@ -240,7 +241,7 @@ InitMemArena_Buffer :: (arena: *MemArena, bufferSize: u64, bufferPntr: *void, si
 	arena.highAllocMark = arena.numAllocations;
 }
 
-UpdateMemArenaFuncPntrs :: (arena: *MemArena, allocFunc: (u64) -> *void, freeFunc: (*void) -> void)
+UpdateMemArenaFuncPntrs :: (arena: *MemArena, allocFunc: AllocationFunction, freeFunc: FreeFunction)
 {
 	Assert(arena.type == .Redirect || arena.type == .PagedHeap);
 	arena.allocFunc = allocFunc;
@@ -633,6 +634,11 @@ SetMemArenaAsAllocator :: (memArena: *MemArena)
 	context.allocator = MemArenaGetAllocator(memArena);
 }
 
+SetMemArenaAsTemporaryStorageAllocator :: (memArena: *MemArena)
+{
+	context.temporary_storage.overflow_allocator = MemArenaGetAllocator(memArena);
+}
+
 TryGetMemArenaForAllocator :: (allocator: Allocator) -> *MemArena
 {
 	if (allocator.proc == MemArenaAllocatorProc && allocator.data != null)
@@ -676,7 +682,7 @@ AllocMem :: (arena: *MemArena, numBytes: u64, alignOverride := AllocAlignment.No
 		case .Redirect;
 		{
 			Assert(alignment == .None, "Tried to align memory in Redirect arena type");
-			// NotNull(arena.allocFunc); //TODO: Re-enable me!
+			NotNull(xx arena.allocFunc);
 			result = cast(*u8)arena.allocFunc(numBytes);
 			if (result != null)
 			{
@@ -1886,4 +1892,4 @@ TestMemory :: ()
 	assert(GetNumMarks(*tempArena) == 0);
 	assert(tempArena.used == 0);
 }
-// #run TestMemory();
+#run TestMemory();

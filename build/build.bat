@@ -19,6 +19,7 @@ set PdbName=%ProjectNameSafe%.pdb
 echo [Compiling "%ProjectName%" in %WorkingDirectory%...]
 
 rem -no_cwd - Stops the compiler from changing the working directory when compiling. This keeps the generated .build folder in our build folder
+rem -plug Codex - Outputs a .codex file that contains a bunch of information about the program? Still not sure exactly what the info is
 jai "%CodeDirectory%\build.jai" -no_dce -output_path "%WorkingDirectory%" -exe "%ExeName%"
 
 rem NOTE: Jai compiler seems to always put the result in the same folder as the code. We need to copy the .exe and .pdb to our build folder manually

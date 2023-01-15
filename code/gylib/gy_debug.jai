@@ -2,7 +2,7 @@
 //TODO: We could try turning dbgLevel into an optional constant and do #if on dbgLevel
 // against some rules about which levels are enabled (assuming we want to enable/disable by level)
 
-DbgLevel :: enum
+DbgLevel :: enum u8
 {
 	None :: 0;
 	Debug;
@@ -27,7 +27,7 @@ DebugOutput :: (dbgLevel: DbgLevel, doNewLine: bool, message: string)
 	
 	#if (DEBUG_OUTPUT_FUNC)
 	{
-		DEBUG_OUTPUT_FUNC(outputLine);
+		DEBUG_OUTPUT_FUNC(cast(u8)dbgLevel, outputLine);
 	}
 	else
 	{

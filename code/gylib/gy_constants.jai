@@ -20,6 +20,16 @@ e64  :: cast(float64)2.71828182845904509079559829843;    //accurate to 15 digits
 e32  :: cast(float32)2.71828174591064453125;             //accurate to 6 digits
 eVal :: 2.7182818284590452353602874713526;
 
+Kilo ::                 (1024); //             1,024 bytes
+Mega ::            (1024*1024); //         1,048,576 bytes
+Giga ::       (1024*1024*1024); //     1,073,741,824 bytes
+Tera ::  (1024*1024*1024*1024); // 1,099,511,627,776 bytes
+
+Kilobytes :: inline (numKilobytes: u64) -> u64 { return numKilobytes * Kilo; }
+Megabytes :: inline (numMegabytes: u64) -> u64 { return numMegabytes * Mega; }
+Gigabytes :: inline (numGigabytes: u64) -> u64 { return numGigabytes * Giga; }
+Terabytes :: inline (numTerabytes: u64) -> u64 { return numTerabytes * Tera; }
+
 DEFAULT_EPSILON :: 0.0001; //Copied from Sloppy_Math.jai, used for BasicallyEqual functions
 
 UNKNOWN_ENUM_STR :: "Unknown";
