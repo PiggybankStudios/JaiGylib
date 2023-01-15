@@ -7,6 +7,8 @@ mainHeap:  *MemArena;
 tempArena: *MemArena;
 stdHeap:   *MemArena;
 
+platformContext: Context;
+
 SetupMemoryArenas :: ()
 {
 	mainHeap  = *mainHeapStruct;
@@ -23,6 +25,8 @@ SetupMemoryArenas :: ()
 	context.temporary_storage.data = tempMemory.data;
 	context.temporary_storage.size = tempMemory.count;
 	SetMemArenaAsTemporaryStorageAllocator(mainHeap);
+	
+	platformContext = context;
 	
 	// PrintLine_D("mainHeap: %", <<mainHeap);
 }

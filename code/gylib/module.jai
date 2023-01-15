@@ -1,6 +1,6 @@
 
 #module_parameters (
-	DEBUG_BUILD := false,
+	GYLIB_DEBUG_BUILD := false,
 	ASSERT_FAILURE_FUNC: (message: string, callString: string) -> bool = null,
 	DEBUG_OUTPUT_FUNC: (dbgLevel: u8, message: string) = null,
 	DEBUG_OUTPUT_LVL_PREFIX: bool = false

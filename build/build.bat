@@ -13,22 +13,38 @@ set GameDirectory=..\game
 set DataDirectory=..\data
 set TimeString=%date:~-4,4%%date:~-10,2%%date:~-7,2%%time:~0,2%%time:~3,2%%time:~6,2%
 
+rem NOTE: We name the dll a unique number based on time so that the pdb will get a unique name, and the hot-reload in VS will go smoothly. We rename the .dll to a non-suffix version later
+
 set ExeName=%ProjectNameSafe%.exe
 set PdbName=%ProjectNameSafe%.pdb
+set DllName=%ProjectNameSafe%.dll
+set DllLongName=%ProjectNameSafe%_%TimeString%.dll
+set DllPdbName=%ProjectNameSafe%_%TimeString%.pdb
 
 echo [Compiling "%ProjectName%" in %WorkingDirectory%...]
 
+rem Remove the files from the previous compilation. Neglect exe's and dlls because they may be in use by a running application
+rem DEL *.exe 2> NUL
+rem DEL *.dll 2> NUL
+DEL *.pdb 2> NUL
+DEL *.lib 2> NUL
+DEL .added_strings*.jai 2> NUL
+
 rem -no_cwd - Stops the compiler from changing the working directory when compiling. This keeps the generated .build folder in our build folder
 rem -plug Codex - Outputs a .codex file that contains a bunch of information about the program? Still not sure exactly what the info is
-jai "%CodeDirectory%\build.jai" -no_dce -output_path "%WorkingDirectory%" -exe "%ExeName%"
+jai "%CodeDirectory%\build.jai" -no_dce - -project_name="%ProjectName%" -project_name_safe="%ProjectNameSafe%" -output_path "%WorkingDirectory%" -exe "%ExeName%" -dll "%DllLongName%"
 
-rem NOTE: Jai compiler seems to always put the result in the same folder as the code. We need to copy the .exe and .pdb to our build folder manually
-rem MOVE /Y "%CodeDirectory%\%ExeName%" "%ExeName%" > NUL
-rem MOVE /Y "%CodeDirectory%\%PdbName%" "%PdbName%" > NUL
+rem Remove temporary build files that we don't care about
+DEL *.exp 2> NUL
+DEL *.obj 2> NUL
+
+rem Remove the suffix on the .dll
+MOVE /Y "%DllLongName%" "%DllName%" > NUL
 
 if "%CopyToDataDirectory%"=="1" (
-	echo [Copying %ProjectNameSafe%.exe to data directory]
-	XCOPY ".\%ProjectNameSafe%.exe" "%DataDirectory%\" /Y > NUL
+	echo [Copying %ExeName% and %DllName% to data directory]
+	XCOPY ".\%ExeName%" "%DataDirectory%\" /Y > NUL
+	XCOPY ".\%DllName%" "%DataDirectory%\" /Y > NUL
 ) else (
 	echo [Build Finished!]
 )

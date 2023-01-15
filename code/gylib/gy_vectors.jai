@@ -78,13 +78,19 @@ operator - :: (vector: v2i) -> v2i { return v2i.{ -vector.x, -vector.y }; }
 operator - :: (vector: v3i) -> v3i { return v3i.{ -vector.x, -vector.y, -vector.z }; }
 operator - :: (vector: v4i) -> v4i { return v4i.{ -vector.x, -vector.y, -vector.z, -vector.w }; }
 
-operator * :: (vector: v2i, scalar: s32) -> v2i #symmetric { return v2i.{ vector.x * scalar, vector.y * scalar }; }
-operator * :: (vector: v3i, scalar: s32) -> v3i #symmetric { return v3i.{ vector.x * scalar, vector.y * scalar, vector.z * scalar }; }
-operator * :: (vector: v4i, scalar: s32) -> v4i #symmetric { return v4i.{ vector.x * scalar, vector.y * scalar, vector.z * scalar, vector.w * scalar }; }
+operator * :: (vector: v2,  scalar: float32) -> v2  #symmetric { return  v2.{ vector.x * scalar, vector.y * scalar }; }
+operator * :: (vector: v3,  scalar: float32) -> v3  #symmetric { return  v3.{ vector.x * scalar, vector.y * scalar, vector.z * scalar }; }
+operator * :: (vector: v4,  scalar: float32) -> v4  #symmetric { return  v4.{ vector.x * scalar, vector.y * scalar, vector.z * scalar, vector.w * scalar }; }
+operator * :: (vector: v2i, scalar: s32)     -> v2i #symmetric { return v2i.{ vector.x * scalar, vector.y * scalar }; }
+operator * :: (vector: v3i, scalar: s32)     -> v3i #symmetric { return v3i.{ vector.x * scalar, vector.y * scalar, vector.z * scalar }; }
+operator * :: (vector: v4i, scalar: s32)     -> v4i #symmetric { return v4i.{ vector.x * scalar, vector.y * scalar, vector.z * scalar, vector.w * scalar }; }
 
-operator / :: (vector: v2i, scalar: s32) -> v2i { return v2i.{ vector.x / scalar, vector.y / scalar }; }
-operator / :: (vector: v3i, scalar: s32) -> v3i { return v3i.{ vector.x / scalar, vector.y / scalar, vector.z / scalar }; }
-operator / :: (vector: v4i, scalar: s32) -> v4i { return v4i.{ vector.x / scalar, vector.y / scalar, vector.z / scalar, vector.w / scalar }; }
+operator / :: (vector: v2,  scalar: float32) -> v2  { return  v2.{ vector.x / scalar, vector.y / scalar }; }
+operator / :: (vector: v3,  scalar: float32) -> v3  { return  v3.{ vector.x / scalar, vector.y / scalar, vector.z / scalar }; }
+operator / :: (vector: v4,  scalar: float32) -> v4  { return  v4.{ vector.x / scalar, vector.y / scalar, vector.z / scalar, vector.w / scalar }; }
+operator / :: (vector: v2i, scalar: s32)     -> v2i { return v2i.{ vector.x / scalar, vector.y / scalar }; }
+operator / :: (vector: v3i, scalar: s32)     -> v3i { return v3i.{ vector.x / scalar, vector.y / scalar, vector.z / scalar }; }
+operator / :: (vector: v4i, scalar: s32)     -> v4i { return v4i.{ vector.x / scalar, vector.y / scalar, vector.z / scalar, vector.w / scalar }; }
 
 // +--------------------------------------------------------------+
 // |                   Simple Value Definitions                   |

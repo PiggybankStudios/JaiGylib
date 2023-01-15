@@ -250,7 +250,7 @@ Mat4MultiplyVec4 :: (matrix: mat4, vector: v4, divideByW := true) -> v4
 	return result;
 }
 
-Mat4ApplyLeft :: (matrix: *mat4, transformation: *mat4) { <<matrix = Mat4Multiply(<<transformation, <<matrix); }
+Mat4ApplyLeft :: (matrix: *mat4, transformation: mat4) { <<matrix = Mat4Multiply(transformation, <<matrix); }
 Mat4Transform :: Mat4ApplyLeft;
 
 // +--------------------------------------------------------------+

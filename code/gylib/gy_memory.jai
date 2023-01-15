@@ -628,6 +628,10 @@ MemArenaGetAllocator :: (memArena: *MemArena) -> Allocator
 {
 	return Allocator.{MemArenaAllocatorProc, memArena};
 }
+MemArenaGetAllocator_C :: (memArena: *MemArena) -> Allocator #c_call
+{
+	return Allocator.{MemArenaAllocatorProc, memArena};
+}
 
 SetMemArenaAsAllocator :: (memArena: *MemArena)
 {

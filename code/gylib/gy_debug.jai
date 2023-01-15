@@ -31,7 +31,7 @@ DebugOutput :: (dbgLevel: DbgLevel, doNewLine: bool, message: string)
 	}
 	else
 	{
-		OsDebugOutput(outputLine);
+		WriteToStdOutput(outputLine);
 	}
 }
 DebugOutputPrint :: (dbgLevel: DbgLevel, doNewLine: bool, formatStr: string, args: ..Any)

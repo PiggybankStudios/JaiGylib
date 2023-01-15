@@ -180,6 +180,17 @@ IncrementBy    :: inline (variable: *$T, amount: T) #modify { return AnyUnsigned
 Decrement   :: inline (variable: *$T)            #modify { return AnyUnsigned(T); } { if ((<<variable) > 0)      { (<<variable) -= 1;      } else { (<<variable) = 0; } }
 DecrementBy :: inline (variable: *$T, amount: T) #modify { return AnyUnsigned(T); } { if ((<<variable) > amount) { (<<variable) -= amount; } else { (<<variable) = 0; } }
 
+OscillateBy :: (timeSource: u64, min: float32, max: float32, periodMs: u64, offset: u64 = 0) -> float32
+{
+	lerpValue := (SinF32((((timeSource + offset) % periodMs) / cast(float32)periodMs) * 2*Pi32) + 1.0) / 2.0;
+	return min + (max - min) * lerpValue;
+}
+OscillateSawBy :: (timeSource: u64, min: float32, max: float32, periodMs: u64, offset: u64 = 0) -> float32
+{
+	lerpValue := (SawF32((((timeSource + offset) % periodMs) / cast(float32)periodMs) * 2*Pi32) + 1.0) / 2.0;
+	return min + (max - min) * lerpValue;
+}
+
 // +--------------------------------------------------------------+
 // |                             Test                             |
 // +--------------------------------------------------------------+

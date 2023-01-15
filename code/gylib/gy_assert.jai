@@ -6,7 +6,7 @@ MyBreak :: inline ()
 	if #compile_time { debug_break(); }
 	else { Debug.abort(); }
 }
-MyDebugBreak :: inline () { #if DEBUG_BUILD { MyBreak(); } }
+MyDebugBreak :: inline () { #if GYLIB_DEBUG_BUILD { MyBreak(); } }
 
 Assert_ :: (condition: bool, message: string = "", call := #caller_code) #expand
 {
@@ -20,7 +20,7 @@ Assert_ :: (condition: bool, message: string = "", call := #caller_code) #expand
 	{
 		print("An assertion failed: % is not true!\n", callString);
 		
-		if (DEBUG_BUILD && Debug.is_debugger_present())
+		if (GYLIB_DEBUG_BUILD && Debug.is_debugger_present())
 		{
 			Debug.breakpoint();
 		}
@@ -30,7 +30,7 @@ Assert_ :: (condition: bool, message: string = "", call := #caller_code) #expand
 		}
 	}
 }
-DebugAssert_ :: (condition: bool, message: string = "", call := #caller_code) #expand { #if DEBUG_BUILD { Assert_(condition, message, call); } }
+DebugAssert_ :: (condition: bool, message: string = "", call := #caller_code) #expand { #if GYLIB_DEBUG_BUILD { Assert_(condition, message, call); } }
 
 Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 {
@@ -49,7 +49,7 @@ Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 	}
 	else { Assert_(condition, message, call); }
 }
-DebugAssert :: (condition: bool, message: string = "", call := #caller_code) #expand { #if DEBUG_BUILD { Assert(condition, message, call); } }
+DebugAssert :: (condition: bool, message: string = "", call := #caller_code) #expand { #if GYLIB_DEBUG_BUILD { Assert(condition, message, call); } }
 
 AssertIf :: (precondition: bool, expression: bool, message: string = "", call := #caller_code) #expand { if (precondition) { Assert(expression, message, call); } }
 AssertIf_ :: (precondition: bool, expression: bool, message: string = "", call := #caller_code) #expand { if (precondition) { Assert_(expression, message, call); } }
