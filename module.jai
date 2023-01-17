@@ -12,8 +12,9 @@
 #import "Sloppy_Math";
 #import "Compiler";
 #import "Program_Print";
+#import "File";
 Debug :: #import "Debug";
-#if OS == .WINDOWS { #import "Windows"; }
+#if (OS == .WINDOWS) { #import "Windows"; }
 else { #import "POSIX"; }
 
 #load "gy_constants.jai";

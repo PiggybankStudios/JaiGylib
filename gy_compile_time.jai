@@ -104,3 +104,24 @@ LastEnumValue :: ($enumType: Type) -> enumType
 	values := enum_values_as_s64(enumType);
 	return cast(enumType)values[values.count - 1];
 }
+
+//NOTE: This function doesn't take advantage of any compile-time features but it
+//      can be used with a #run directive to fill a string at compile time with
+//      the contents of a file (like loading shader source code from a file)
+LoadEntireFile :: (filePath: string, searchDirectories: []string = string.[]) -> string
+{
+	file, openSuccess := file_open(filePath);
+	if (!openSuccess)
+	{
+		for searchDirectories
+		{
+			file, openSuccess = file_open(tprint("%/%", it, filePath));
+			if (openSuccess) { break; }
+		}
+		if (!openSuccess) { DebugAssert(false); return ""; }
+	}
+	fileContents, readSuccess := read_entire_file(file);
+	file_close(*file);
+	if (!readSuccess) { DebugAssert(readSuccess); return ""; }
+	return fileContents;
+}

@@ -2,8 +2,16 @@
 // +--------------------------------------------------------------+
 // |                            Types                             |
 // +--------------------------------------------------------------+
-// Quaternion is defined in Math module
-quat :: Quaternion;
+//NOTE: Using MyQuaternion to avoid naming conflict with Math module's Quaternion
+MyQuaternion :: struct
+{
+	x, y, z, w: float32;
+    w = 1;
+    
+    #place x; component: [4]float32 = ---;
+	#place x; xyz: v3 = ---;
+}
+quat :: MyQuaternion;
 
 EulerOrder :: enum
 {
@@ -17,9 +25,14 @@ EulerOrder :: enum
 EulerOrder_NumOrders :: cast(u8)( #run enum_values_as_s64(EulerOrder).count );
 
 // +--------------------------------------------------------------+
+// |                      Operator Overloads                      |
+// +--------------------------------------------------------------+
+operator - :: (quaternion: quat) -> quat { return quat.{-quaternion.x, -quaternion.y, -quaternion.z, -quaternion.w }; }
+
+// +--------------------------------------------------------------+
 // |                   Simple Value Definitions                   |
 // +--------------------------------------------------------------+
-Quat_Identity :: Quaternion.{ 0, 0, 0, 1 };
+Quat_Identity :: quat.{ 0, 0, 0, 1 };
 
 // +--------------------------------------------------------------+
 // |                        New Functions                         |
@@ -35,6 +48,9 @@ NewQuat :: (x: float32, y: float32, z: float32, w: float32, normalize := true) -
 	return ifx normalize then QuatNormalize(result) else result;
 }
 
+ToQuat :: (mathQuaternion: Quaternion) -> quat { return quat.{ mathQuaternion.x, mathQuaternion.y, mathQuaternion.z, mathQuaternion.w }; }
+ToMathQuaternion :: (quaternion: quat) -> Quaternion { return Quaternion.{ quaternion.x, quaternion.y, quaternion.z, quaternion.w }; }
+
 ToQuat :: (vector: v4) -> quat { return quat.{ vector.x, vector.y, vector.z, vector.w }; }
 
 // +--------------------------------------------------------------+
@@ -45,7 +61,7 @@ QuatBasicallyEqual :: (left: quat, right: quat, epsilon: float32 = DEFAULT_EPSIL
 // +--------------------------------------------------------------+
 // |                    Basic Math Operations                     |
 // +--------------------------------------------------------------+
-QuatNormalize :: (quaternion: quat) -> quat { tempQuat := quaternion; normalize_or_identity(*tempQuat); return tempQuat; }
+QuatNormalize :: (quaternion: quat) -> quat { tempQuat := ToMathQuaternion(quaternion); normalize_or_identity(*tempQuat); return ToQuat(tempQuat); }
 
 QuatGetAngle :: (quaternion: quat) -> float32
 {
