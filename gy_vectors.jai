@@ -577,4 +577,4 @@ TestVectors :: ()
 	test4 = Vec4_Half;
 	assert(test4 == v4.{ 0.5, 0.5, 0.5, 0.5 });
 }
-// #run TestVectors();
+// #if GYLIB_RUN_TESTS { #run TestVectors(); }

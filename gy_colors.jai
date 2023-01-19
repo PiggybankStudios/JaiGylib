@@ -131,7 +131,7 @@ NewColorLab :: inline (l: float32, a: float32, b: float32, alpha: float32 = 1.0)
 // +--------------------------------------------------------------+
 //NOTE: I don't remember how these work. What the heck is the <= 0.04045 check?
 //Convert sRGB to linear RGB
-_SrgbToLinear :: (nonlinearValue: $T) -> T
+_SrgbToLinear :: inline (nonlinearValue: $T) -> T
 {
 	return ifx (nonlinearValue <= 0.04045) then (nonlinearValue / 12.92) else (PowF((nonlinearValue+0.055)/1.055, 2.4));
 }
@@ -139,12 +139,29 @@ SrgbToLinear :: #bake_constants _SrgbToLinear(T=float32);
 SrgbToLinear :: #bake_constants _SrgbToLinear(T=float64);
 
 //Convert linear RGB to sRGB
-_LinearToSrgb :: (linearValue: $T) -> T
+_LinearToSrgb :: inline (linearValue: $T) -> T
 {
 	return ifx (linearValue <= 0.0031308) then (linearValue * 12.92) else (1.055 * PowF(linearValue, 1.0/2.4) - 0.055);
 }
 LinearToSrgb :: #bake_constants _LinearToSrgb(T=float32);
 LinearToSrgb :: #bake_constants _LinearToSrgb(T=float64);
+
+_SrgbToLinearFast :: inline (nonlinearValue: $T) -> T
+{
+    return nonlinearValue * (nonlinearValue * (nonlinearValue * 0.30530601 + 0.68217111) + 0.012522878);
+}
+SrgbToLinearFast :: #bake_constants _SrgbToLinearFast(T=float32);
+SrgbToLinearFast :: #bake_constants _SrgbToLinearFast(T=float64);
+
+_LinearToSrgbFast :: inline (linearValue: $T) -> T
+{
+    root1 := SqrtF(linearValue);
+    root2 := SqrtF(root1);
+    root3 := SqrtF(root2);
+    return 0.66200269 * root1 + 0.6841221 * root2 - 0.3235836 * root3 - 0.022541147 * linearValue;
+}
+LinearToSrgbFast :: #bake_constants _LinearToSrgbFast(T=float32);
+LinearToSrgbFast :: #bake_constants _LinearToSrgbFast(T=float64);
 
 ConvertColorToLinear :: (color: Color) -> Colorf
 {
@@ -164,6 +181,24 @@ ConvertColorfToLinear :: (color: Colorf) -> Colorf
 		color.a
 	);
 }
+ConvertColorToLinearFast :: (color: Color) -> Colorf
+{
+	return NewColorf(
+		SrgbToLinearFast(ColorChannelToF32(color.r)),
+		SrgbToLinearFast(ColorChannelToF32(color.g)),
+		SrgbToLinearFast(ColorChannelToF32(color.b)),
+		ColorChannelToF32(color.a)
+	);
+}
+ConvertColorfToLinearFast :: (color: Colorf) -> Colorf
+{
+	return NewColorf(
+		SrgbToLinearFast(color.r),
+		SrgbToLinearFast(color.g),
+		SrgbToLinearFast(color.b),
+		color.a
+	);
+}
 
 ConvertColorToSrgb :: (color: Colorf) -> Color
 {
@@ -180,6 +215,24 @@ ConvertColorfToSrgb :: (color: Colorf) -> Colorf
 		LinearToSrgb(color.r),
 		LinearToSrgb(color.g),
 		LinearToSrgb(color.b),
+		color.a
+	);
+}
+ConvertColorToSrgbFast :: (color: Colorf) -> Color
+{
+	return NewColor(
+		ColorChannelToU8(LinearToSrgbFast(color.r)),
+		ColorChannelToU8(LinearToSrgbFast(color.g)),
+		ColorChannelToU8(LinearToSrgbFast(color.b)),
+		ColorChannelToU8(color.a)
+	);
+}
+ConvertColorfToSrgbFast :: (color: Colorf) -> Colorf
+{
+	return NewColorf(
+		LinearToSrgbFast(color.r),
+		LinearToSrgbFast(color.g),
+		LinearToSrgbFast(color.b),
 		color.a
 	);
 }
@@ -540,6 +593,33 @@ TestColors :: ()
 	assert(ColorLerp(color2, color1, 0.5) == NewColor(128, 128, 128, 255));
 	assert(ColorLerp(color1, color2, 0.5) == NewColor(128, 128, 128, 255));
 	
+	random_seed(current_time_consensus().low);
+	for 0..100
+	{
+		randomColor := NewColor(xx random_get_within_range(0, 255), xx random_get_within_range(0, 255), xx random_get_within_range(0, 255));
+		randomColorLinear := ConvertColorToLinear(randomColor);
+		randomColorLinearFast := ConvertColorToLinearFast(randomColor);
+		Assert(ColorfBasicallyEqual(randomColorLinear, randomColorLinearFast, 0.0017)); //0.0017 is just imperically tested here by running this a bunch
+	}
+	
+	slowStart := current_time_monotonic();
+	for 0..100
+	{
+		randomColor := NewColor(xx random_get_within_range(0, 255), xx random_get_within_range(0, 255), xx random_get_within_range(0, 255));
+		randomColorLinear := ConvertColorToLinear(randomColor);
+	}
+	slowEnd := current_time_monotonic();
+	fastStart := current_time_monotonic();
+	for 0..100
+	{
+		randomColor := NewColor(xx random_get_within_range(0, 255), xx random_get_within_range(0, 255), xx random_get_within_range(0, 255));
+		randomColorLinear := ConvertColorToLinearFast(randomColor);
+	}
+	fastEnd := current_time_monotonic();
+	// print("slow: %ms\nfast: %ms\n", to_float64_seconds(slowEnd - slowStart) * 1000, to_float64_seconds(fastEnd - fastStart) * 1000);
+	// assert((slowEnd - slowStart) >= (fastEnd - fastStart));
+	
+	
 	nicePurple := NewColor(128, 100, 159);
 	nicePurplef := ToColorf(nicePurple);
 	nicePurpleXyz := ConvertColorSrgbToXyz(nicePurple);
@@ -564,4 +644,4 @@ TestColors :: ()
 	assert(nicePurple == ConvertColorXyzToSrgb(ConvertColorLabToXyz(ConvertColorLchToLab(nicePurpleLch))));
 	assert(cast(s64)ColorIlluminant.A == 0);
 }
-// #run TestColors();
+// #if GYLIB_RUN_TESTS { #run TestColors(); }

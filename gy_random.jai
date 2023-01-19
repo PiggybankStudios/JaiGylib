@@ -2,6 +2,7 @@
 //TODO: In general this file needs to be tested to see if our various random distributions are even
 
 SeedRand :: inline (seed: u64) { random_seed(seed); }
+SeedRand :: inline () { random_seed(current_time_consensus().low); }
 
 RandU64 :: inline () -> u64 { return random_get(); }
 RandF32 :: inline () -> float32 { return random_get_zero_to_one(); }

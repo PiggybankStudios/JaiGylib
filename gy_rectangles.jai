@@ -594,4 +594,4 @@ TestRecs :: ()
 	assert(test2.size.y == 4);
 	assert(test2.topLeft.x == 1);
 }
-// #run TestRecs();
+// #if GYLIB_RUN_TESTS { #run TestRecs(); }

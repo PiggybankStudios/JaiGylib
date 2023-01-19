@@ -14,7 +14,11 @@ BasicallyEqual    :: inline (left: $A, right: $B, epsilon: $C = DEFAULT_EPSILON)
 	return (AbsF(left - right) <= epsilon);
 }
 
-SignOf :: inline (value: $T) -> T #modify { return AnyNumber(T); } { return (ifx (value >= 0) then cast(T)1 else cast(T)-1); }
+SignOf :: inline (value: $T, $returnZero := false) -> T #modify { return AnyNumber(T); }
+{
+	#if (returnZero) { return cast(T)(value > 0) - cast(T)(value < 0); }
+	else { return cast(T)(value >= 0) - cast(T)(value < 0); }
+}
 
 //NOTE: This works differently than it did in gy_intrinsics.h! It represents the fractional part that you would see
 //      when reading the number in text form. i.e. -10.1 returns 0.1 not 0.9. Use ModF for something that would return 0.9
@@ -358,5 +362,12 @@ TestMath :: ()
 	print("255 (float32) -> s8 = %\n", ClampCastFromFloat(cast(float32)255, s8));
 	print("5,000,000,000 (float32) -> u32 = %\n", ClampCastFromFloat(cast(float32)5_000_000_000, u32));
 	print("-4,000,000,000 (float32) -> s32 = %\n", ClampCastFromFloat(cast(float32)-4_000_000_000, s32));
+	
+	print("SignOf(cast(s64)2): %\n",  SignOf(cast(s64)2,  false));
+	print("SignOf(cast(s64)-5): %\n", SignOf(cast(s64)-5, false));
+	print("SignOf(cast(s64)0): %\n",  SignOf(cast(s64)0,  false));
+	print("SignOf(cast(float32)2): %\n",  SignOf(cast(float32)2,  false));
+	print("SignOf(cast(float32)-5): %\n", SignOf(cast(float32)-5, false));
+	print("SignOf(cast(float32)0): %\n",  SignOf(cast(float32)0,  false));
 }
-// #run TestMath();
+// #if GYLIB_RUN_TESTS { #run TestMath(); }

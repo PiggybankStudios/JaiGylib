@@ -214,4 +214,4 @@ TestQuaternions :: ()
 {
 	
 }
-// #run TestQuaternions();
+// #if GYLIB_RUN_TESTS { #run TestQuaternions(); }
