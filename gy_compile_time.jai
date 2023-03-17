@@ -115,13 +115,19 @@ LoadEntireFile :: (filePath: string, searchDirectories: []string = string.[]) ->
 	{
 		for searchDirectories
 		{
-			file, openSuccess = file_open(tprint("%/%", it, filePath));
-			if (openSuccess) { break; }
+			potentialFullPath := tprint("%/%", it, filePath);
+			file, openSuccess = file_open(potentialFullPath);
+			if (openSuccess)
+			{
+				// print("LoadEntireFile finds \"%\"\n", potentialFullPath);
+				break;
+			}
 		}
 		if (!openSuccess) { DebugAssert(false); return ""; }
 	}
 	fileContents, readSuccess := read_entire_file(file);
 	file_close(*file);
 	if (!readSuccess) { DebugAssert(readSuccess); return ""; }
+	// print("LoadEntireFile returns \"%\"\n", fileContents);
 	return fileContents;
 }

@@ -69,7 +69,7 @@ TestHashing :: ()
 		append(*stringBuilder, RandU8(#char " ", #char "~" + 1));
 	}
 	
-	input1 := "Hello World!";
+	input1 := "Nobody inspects the spammish repetition"; //"Hello World!";
 	input2 := "Hell World!";
 	input3 := builder_to_string(*stringBuilder);
 	
@@ -83,9 +83,15 @@ TestHashing :: ()
 	xxHash1 := xxHashStrU32(input1);
 	xxHash2 := xxHashStrU32(input2);
 	xxHash3 := xxHashStrU32(input3);
+	xxHash4 := xxHashStrU64(input1);
+	xxHash5 := xxHashStrU64(input2);
+	xxHash6 := xxHashStrU64(input3);
 	print("xxHashStrU32(\"%\"): % 0x%\n", input1, xxHash1, formatInt(xxHash1, base=16));
 	print("xxHashStrU32(\"%\"): % 0x%\n", input2, xxHash2, formatInt(xxHash2, base=16));
 	print("xxHashStrU32(\"%\"): % 0x%\n", input3, xxHash3, formatInt(xxHash3, base=16));
+	print("xxHashStrU64(\"%\"): % 0x%\n", input1, xxHash4, formatInt(xxHash4, base=16));
+	print("xxHashStrU64(\"%\"): % 0x%\n", input2, xxHash5, formatInt(xxHash5, base=16));
+	print("xxHashStrU64(\"%\"): % 0x%\n", input3, xxHash6, formatInt(xxHash6, base=16));
 }
 // #if GYLIB_RUN_TESTS { #run TestHashing(); }
 

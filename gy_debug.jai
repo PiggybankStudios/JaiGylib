@@ -31,7 +31,7 @@ DebugOutput :: (dbgLevel: DbgLevel, doNewLine: bool, message: string)
 	}
 	else
 	{
-		WriteToStdOutput(outputLine);
+		print_and_output_debug(outputLine);
 	}
 }
 DebugOutputPrint :: (dbgLevel: DbgLevel, doNewLine: bool, formatStr: string, args: ..Any)
@@ -92,14 +92,5 @@ DebugWaitForStdInput :: ()
 			bytes_read := read(STDIN_FILENO, buffer.data, cast(u64)buffer.count);
 		}
 		if (bytes_read != 0) { break; }
-	}
-}
-
-WriteToStdOutput :: (message: string, doOutputDebugStringOnWindows: = true)
-{
-	print(message);
-	#if (OS == .WINDOWS)
-	{
-		if (doOutputDebugStringOnWindows && IsDebuggerPresent()) { OutputDebugStringA(temp_c_string(message)); }
 	}
 }
