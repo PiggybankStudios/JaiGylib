@@ -619,6 +619,28 @@ MemArenaAllocatorProc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_me
         case .ALLOCATE; return AllocMem(memArena, cast(u64)size);
         case .RESIZE;   return ReallocMem(memArena, old_memory, cast(u64)size, cast(u64)old_size, ignoreNullptr=true);
         case .FREE;     FreeMem(memArena, old_memory, cast(u64)old_size, ignoreNullptr=true);
+        case .STARTUP;  return null;
+        case .SHUTDOWN; return null;
+        case .CREATE_HEAP; return null;
+        case .DESTROY_HEAP; return null;
+        case .THREAD_STOP; return null;
+        case .THREAD_START; return null;
+        case .IS_THIS_YOURS; return null; //TODO: Can we implement this? Does anyone ask this yet?
+        case .CAPS; 
+        {
+        	if (old_memory != null) { <<cast(*string)old_memory = "Gylib.MemArena MemArenaAllocatorProc"; }
+        	capabilities: Allocator_Caps = 0;
+        	// FlagSet(*capabilities, .MULTIPLE_THREADS);
+        	// FlagSet(*capabilities, .CREATE_HEAP);
+        	// FlagSet(*capabilities, .FREE);
+        	// FlagSet(*capabilities, .ACTUALLY_RESIZE);
+        	// FlagSet(*capabilities, .IS_THIS_YOURS);
+        	// FlagSet(*capabilities, .HINT_I_AM_A_FAST_BUMP_ALLOCATOR);
+        	// FlagSet(*capabilities, .HINT_I_AM_A_GENERAL_HEAP_ALLOCATOR);
+        	// FlagSet(*capabilities, .HINT_I_AM_A_PER_FRAME_TEMPORARY_STORAGE);
+        	// FlagSet(*capabilities, .HINT_I_AM_A_DEBUG_ALLOCATOR);
+        	return cast(*void)(capabilities);
+        }
         case; Assert_(false, "Invalid or corrupt mode passed to MemArenaAllocatorProc");
     }
     return null;

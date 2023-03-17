@@ -21,7 +21,7 @@ SetupMemoryArenas :: ()
 	InitMemArena_PagedHeapArena(mainHeap, 1*Mega, stdHeap);
 	SetMemArenaAsAllocator(mainHeap);
 	
-	Assert_(context.temporary_storage.occupied == 0);
+	Assert_(context.temporary_storage.total_bytes_occupied == 0);
 	context.temporary_storage.data = tempMemory.data;
 	context.temporary_storage.size = tempMemory.count;
 	SetMemArenaAsTemporaryStorageAllocator(mainHeap);

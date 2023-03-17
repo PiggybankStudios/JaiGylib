@@ -96,7 +96,9 @@ Initialize: DllInitialize : (dllMemory: *DllMemory, platformApi: *PlatformApi, w
 		ClearPointer(*globals.temporaryStorage);
 		globals.temporaryStorage.data = dllMemory.tempMemoryPntr;
 		globals.temporaryStorage.size = cast(s64)dllMemory.tempMemorySize;
-		globals.temporaryStorage.occupied = 0;
+		globals.temporaryStorage.current_page_bytes_occupied = 0;
+		globals.temporaryStorage.total_bytes_occupied = 0;
+		globals.temporaryStorage.high_water_mark = 0;
 		globals.temporaryStorage.overflow_allocator = MemArenaGetAllocator_C(mainHeap);
 		globals.temporaryStorage.overflow_pages = null;
 		globals.temporaryStorage.original_data = null;

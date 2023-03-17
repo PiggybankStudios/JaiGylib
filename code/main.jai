@@ -57,7 +57,7 @@ main :: ()
 	platformApi.FreeMemory = Plat_FreeMemory;
 	dllMemory: DllMemory;
 	
-	dllHandle := Windows.LoadLibraryA("JaiGylibTestHotReload.dll");
+	dllHandle := Windows.LoadLibraryA("JaiGylibTest.dll");
 	if (dllHandle == null)
 	{
 		WriteLine_E("Failed to find/load the hot reload DLL!");
