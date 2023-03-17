@@ -2,12 +2,43 @@
 // +--------------------------------------------------------------+
 // |                            Types                             |
 // +--------------------------------------------------------------+
-// Vector2, Vector3 and Vector4 are defined in Math module
-// TODO: We may want to define these structures ourself so we can alias x as width and y as height and etc.
+//NOTE: Using MyVector2 to avoid naming conflict with Math module's Vector2/Vector3/Vector4
+MyVector2 :: struct
+{
+	x, y: float32;
+	#place x; component: [2]float32;
+	#place x; width: float32;
+	#place y; height: float32;
+}
+v2 :: MyVector2;
 
-v2 :: Vector2;
-v3 :: Vector3;
-v4 :: Vector4;
+MyVector3 :: struct
+{
+	x, y, z: float32;
+	#place x; component: [3]float32;
+	#place x; width: float32;
+	#place y; height: float32;
+	#place z; depth: float32;
+	#place x; xy: v2;
+	#place y; yz: v2;
+}
+v3 :: MyVector3;
+
+MyVector4 :: struct
+{
+	x, y, z, w: float32;
+	#place x; component: [4]float32;
+	#place x; width: float32;
+	#place y; height: float32;
+	#place z; depth: float32;
+	// #place w; wness: float32; //There's no good name for this
+	#place x; xyz: v3;
+	#place y; yzw: v3;
+	#place x; xy: v2;
+	#place y; yz: v2;
+	#place z; zw: v2;
+}
+v4 :: MyVector4;
 
 Vector2i :: struct
 {
@@ -51,22 +82,37 @@ v4i :: Vector4i;
 // +--------------------------------------------------------------+
 // |                      Operator Overloads                      |
 // +--------------------------------------------------------------+
+operator == :: (left:  v2, right: v2)  -> bool { return (left.x == right.x && left.y == right.y); }
+operator == :: (left:  v3, right: v3)  -> bool { return (left.x == right.x && left.y == right.y && left.z == right.z); }
+operator == :: (left:  v4, right: v4)  -> bool { return (left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w); }
 operator == :: (left: v2i, right: v2i) -> bool { return (left.x == right.x && left.y == right.y); }
 operator == :: (left: v3i, right: v3i) -> bool { return (left.x == right.x && left.y == right.y && left.z == right.z); }
 operator == :: (left: v4i, right: v4i) -> bool { return (left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w); }
 
+operator + :: (left: v2,  right: v2)  -> v2  { return  v2.{ left.x + right.x, left.y + right.y }; }
+operator + :: (left: v3,  right: v3)  -> v3  { return  v3.{ left.x + right.x, left.y + right.y, left.z + right.z }; }
+operator + :: (left: v4,  right: v4)  -> v4  { return  v4.{ left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w }; }
 operator + :: (left: v2i, right: v2i) -> v2i { return v2i.{ left.x + right.x, left.y + right.y }; }
 operator + :: (left: v3i, right: v3i) -> v3i { return v3i.{ left.x + right.x, left.y + right.y, left.z + right.z }; }
 operator + :: (left: v4i, right: v4i) -> v4i { return v4i.{ left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w }; }
 
+operator - :: (left: v2,  right: v2)  -> v2  { return  v2.{ left.x - right.x, left.y - right.y }; }
+operator - :: (left: v3,  right: v3)  -> v3  { return  v3.{ left.x - right.x, left.y - right.y, left.z - right.z }; }
+operator - :: (left: v4,  right: v4)  -> v4  { return  v4.{ left.x - right.x, left.y - right.y, left.z - right.z, left.w - right.w }; }
 operator - :: (left: v2i, right: v2i) -> v2i { return v2i.{ left.x - right.x, left.y - right.y }; }
 operator - :: (left: v3i, right: v3i) -> v3i { return v3i.{ left.x - right.x, left.y - right.y, left.z - right.z }; }
 operator - :: (left: v4i, right: v4i) -> v4i { return v4i.{ left.x - right.x, left.y - right.y, left.z - right.z, left.w - right.w }; }
 
+operator * :: (left: v2,  right: v2)  -> v2  { return  v2.{ left.x * right.x, left.y * right.y }; }
+operator * :: (left: v3,  right: v3)  -> v3  { return  v3.{ left.x * right.x, left.y * right.y, left.z * right.z }; }
+operator * :: (left: v4,  right: v4)  -> v4  { return  v4.{ left.x * right.x, left.y * right.y, left.z * right.z, left.w * right.w }; }
 operator * :: (left: v2i, right: v2i) -> v2i { return v2i.{ left.x * right.x, left.y * right.y }; }
 operator * :: (left: v3i, right: v3i) -> v3i { return v3i.{ left.x * right.x, left.y * right.y, left.z * right.z }; }
 operator * :: (left: v4i, right: v4i) -> v4i { return v4i.{ left.x * right.x, left.y * right.y, left.z * right.z, left.w * right.w }; }
 
+operator / :: (left: v2,  right: v2)  -> v2  { return  v2.{ left.x / right.x, left.y / right.y }; }
+operator / :: (left: v3,  right: v3)  -> v3  { return  v3.{ left.x / right.x, left.y / right.y, left.z / right.z }; }
+operator / :: (left: v4,  right: v4)  -> v4  { return  v4.{ left.x / right.x, left.y / right.y, left.z / right.z, left.w / right.w }; }
 operator / :: (left: v2i, right: v2i) -> v2i { return v2i.{ left.x / right.x, left.y / right.y }; }
 operator / :: (left: v3i, right: v3i) -> v3i { return v3i.{ left.x / right.x, left.y / right.y, left.z / right.z }; }
 operator / :: (left: v4i, right: v4i) -> v4i { return v4i.{ left.x / right.x, left.y / right.y, left.z / right.z, left.w / right.w }; }
@@ -171,25 +217,33 @@ Vec4i_Prevward :: v4i.{ 0, 0, 0,-1 };
 // +--------------------------------------------------------------+
 // |                    New and Fill and Casts                    |
 // +--------------------------------------------------------------+
-NewVec2  :: (x: float32, y: float32) -> v2 { return v2.{ x, y }; }
-NewVec3  :: (x: float32, y: float32, z: float32) -> v3 { return v3.{ x, y, z }; }
-NewVec4  :: (x: float32, y: float32, z: float32, w: float32) -> v4 { return v4.{ x, y, z, w }; }
-NewVec2i :: (x: s32, y: s32) -> v2i { return v2i.{ x, y }; }
-NewVec3i :: (x: s32, y: s32, z: s32) -> v3i { return v3i.{ x, y, z }; }
-NewVec4i :: (x: s32, y: s32, z: s32, w: s32) -> v4i { return v4i.{ x, y, z, w }; }
+NewVec2  :: inline (x: float32, y: float32) -> v2 { return v2.{ x, y }; }
+NewVec3  :: inline (x: float32, y: float32, z: float32) -> v3 { return v3.{ x, y, z }; }
+NewVec4  :: inline (x: float32, y: float32, z: float32, w: float32) -> v4 { return v4.{ x, y, z, w }; }
+NewVec2i :: inline (x: s32, y: s32) -> v2i { return v2i.{ x, y }; }
+NewVec3i :: inline (x: s32, y: s32, z: s32) -> v3i { return v3i.{ x, y, z }; }
+NewVec4i :: inline (x: s32, y: s32, z: s32, w: s32) -> v4i { return v4i.{ x, y, z, w }; }
 
-Vec2Fill  :: (value: float32) -> v2 { return v2.{ value, value }; }
-Vec3Fill  :: (value: float32) -> v3 { return v3.{ value, value, value }; }
-Vec4Fill  :: (value: float32) -> v4 { return v4.{ value, value, value, value }; }
-Vec2iFill :: (value: s32) -> v2i { return v2i.{ value, value }; }
-Vec3iFill :: (value: s32) -> v3i { return v3i.{ value, value, value }; }
-Vec4iFill :: (value: s32) -> v4i { return v4i.{ value, value, value, value }; }
+Vec2Fill  :: inline (value: float32) -> v2 { return v2.{ value, value }; }
+Vec3Fill  :: inline (value: float32) -> v3 { return v3.{ value, value, value }; }
+Vec4Fill  :: inline (value: float32) -> v4 { return v4.{ value, value, value, value }; }
+Vec2iFill :: inline (value: s32) -> v2i { return v2i.{ value, value }; }
+Vec3iFill :: inline (value: s32) -> v3i { return v3i.{ value, value, value }; }
+Vec4iFill :: inline (value: s32) -> v4i { return v4i.{ value, value, value, value }; }
 
-ToVec2 :: (vector: v2i) -> v2 { return v2.{ cast(float32)vector.x, cast(float32)vector.y }; }
-ToVec3 :: (vector: v3i) -> v3 { return v3.{ cast(float32)vector.x, cast(float32)vector.y, cast(float32)vector.z }; }
-ToVec4 :: (vector: v4i) -> v4 { return v4.{ cast(float32)vector.x, cast(float32)vector.y, cast(float32)vector.z, cast(float32)vector.w }; }
+ToVec2 :: inline (mathVector: Vector2) -> v2 { return v2.{ mathVector.x, mathVector.y }; }
+ToVec3 :: inline (mathVector: Vector3) -> v3 { return v3.{ mathVector.x, mathVector.y, mathVector.z }; }
+ToVec4 :: inline (mathVector: Vector4) -> v4 { return v4.{ mathVector.x, mathVector.y, mathVector.z, mathVector.w }; }
 
-ToVec4 :: (quaternion: quat) -> v4 { return v4.{ quaternion.x, quaternion.y, quaternion.z, quaternion.w }; }
+ToMathVector2 :: inline (vector: v2) -> Vector2 { return Vector2.{ vector.x, vector.y }; }
+ToMathVector3 :: inline (vector: v3) -> Vector3 { return Vector3.{ vector.x, vector.y, vector.z }; }
+ToMathVector4 :: inline (vector: v4) -> Vector4 { return Vector4.{ vector.x, vector.y, vector.z, vector.w }; }
+
+ToVec2 :: inline (vector: v2i) -> v2 { return v2.{ cast(float32)vector.x, cast(float32)vector.y }; }
+ToVec3 :: inline (vector: v3i) -> v3 { return v3.{ cast(float32)vector.x, cast(float32)vector.y, cast(float32)vector.z }; }
+ToVec4 :: inline (vector: v4i) -> v4 { return v4.{ cast(float32)vector.x, cast(float32)vector.y, cast(float32)vector.z, cast(float32)vector.w }; }
+
+ToVec4 :: inline (quaternion: quat) -> v4 { return v4.{ quaternion.x, quaternion.y, quaternion.z, quaternion.w }; }
 
 // +--------------------------------------------------------------+
 // |                Operator Overload Equivalents                 |
@@ -523,4 +577,4 @@ TestVectors :: ()
 	test4 = Vec4_Half;
 	assert(test4 == v4.{ 0.5, 0.5, 0.5, 0.5 });
 }
-// #run TestVectors();
+// #if GYLIB_RUN_TESTS { #run TestVectors(); }

@@ -1,4 +1,5 @@
 
+//TODO: Go through and replace size.x with size.width and size.y with size.height and size.z with size.depth
 // +--------------------------------------------------------------+
 // |                            Types                             |
 // +--------------------------------------------------------------+
@@ -139,8 +140,8 @@ operator / :: (boundingBox: obb3, scalar: float32)  -> obb3 { return obb3.{ boun
 // +--------------------------------------------------------------+
 NewRec :: (left: float32, top: float32, width: float32, height: float32) -> rec { return rec.{ left, top, width, height }; }
 NewRec :: (topLeft: v2, width: float32, height: float32) -> rec { return rec.{ topLeft.x, topLeft.y, width, height }; }
-NewRec :: (left: float32, top: float32, size: v2) -> rec { return rec.{ left, top, size.x, size.y }; }
-NewRec :: (topLeft: v2, size: v2) -> rec { return rec.{ topLeft.x, topLeft.y, size.x, size.y }; }
+NewRec :: (left: float32, top: float32, size: v2) -> rec { return rec.{ left, top, size.width, size.height }; }
+NewRec :: (topLeft: v2, size: v2) -> rec { return rec.{ topLeft.x, topLeft.y, size.width, size.height }; }
 
 NewRecCentered :: (centerX: float32, centerY: float32, width: float32, height: float32) -> rec { return rec.{ centerX - width/2, centerY - height/2, width, height }; }
 NewRecCentered :: (center: v2, width: float32, height: float32) -> rec { return rec.{ center.x - width/2, center.y - height/2, width, height }; }
@@ -593,4 +594,4 @@ TestRecs :: ()
 	assert(test2.size.y == 4);
 	assert(test2.topLeft.x == 1);
 }
-// #run TestRecs();
+// #if GYLIB_RUN_TESTS { #run TestRecs(); }

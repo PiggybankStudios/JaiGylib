@@ -629,4 +629,4 @@ TestIntrinsics :: ()
 	// 	print("%, %\n", it/10.0, log2(it/10.0));
 	// }
 }
-// #run TestIntrinsics();
+// #if GYLIB_RUN_TESTS { #run TestIntrinsics(); }

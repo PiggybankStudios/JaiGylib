@@ -1182,4 +1182,4 @@ TestDirections :: ()
 		assert(direction == Dir3ExFromIndex(GetDir3ExIndex(direction)));
 	}
 }
-// #run TestDirections();
+// #if GYLIB_RUN_TESTS { #run TestDirections(); }

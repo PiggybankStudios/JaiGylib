@@ -529,4 +529,4 @@ TestMatrices :: ()
 	print("test2: %\n", test2);
 	print("Mat4Multiply(test1, test1): %\n", Mat4Transpose(Mat4Multiply(test1, test1)));
 }
-// #run TestMatrices();
+// #if GYLIB_RUN_TESTS { #run TestMatrices(); }

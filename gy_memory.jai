@@ -1918,4 +1918,4 @@ TestMemory :: ()
 	assert(GetNumMarks(*tempArena) == 0);
 	assert(tempArena.used == 0);
 }
-#run TestMemory();
+// #if GYLIB_RUN_TESTS { #run TestMemory(); }

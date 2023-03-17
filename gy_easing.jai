@@ -597,4 +597,4 @@ TestEasing :: ()
 	// 	print("EasingStyle[%]: %\n", it, EnumFromIndex(EasingStyle, it));
 	// }
 }
-// #run TestEasing();
+// #if GYLIB_RUN_TESTS { #run TestEasing(); }
