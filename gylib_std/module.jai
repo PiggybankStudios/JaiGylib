@@ -4,12 +4,13 @@
 // all prefixed with std_, are implemented without any gylib features and are
 // named in the style of the existing standard library functions and types.
 
-#load "std_basic.jai";
-#load "std_debug.jai";
-#load "std_string.jai";
-#load "std_file.jai";
+#load "gy_std_basic.jai";
+#load "gy_std_debug.jai";
+#load "gy_std_string.jai";
+#load "gy_std_file.jai";
 
 #scope_module
+
 #if (OS == .WINDOWS) { Windows :: #import "Windows"; }
 else { Posix :: #import "POSIX"; }
 

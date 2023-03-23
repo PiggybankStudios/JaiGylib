@@ -33,3 +33,19 @@ Terabytes :: inline (numTerabytes: u64) -> u64 { return numTerabytes * Tera; }
 DEFAULT_EPSILON :: 0.0001; //Copied from Sloppy_Math.jai, used for BasicallyEqual functions
 
 UNKNOWN_ENUM_STR :: "Unknown";
+
+GraphicsApi :: enum
+{
+	OPENGL;
+	D3D11;
+	D3D12;
+	VULKAN;
+	METAL;
+}
+
+WindowApi :: enum
+{
+	SDL;
+	GLFW;
+	CUSTOM;
+}

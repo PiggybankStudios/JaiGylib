@@ -1,6 +1,12 @@
 
 //TODO: Somehow we'd like these assertions to work at compile time as well. Maybe there is some way to do #if compile_time() ??
 
+#if (GYLIB_ASSERTIONS_ENABLED)
+{
+
+#import "Compiler";
+#import "Program_Print";
+
 MyBreak :: inline ()
 {
 	if #compile_time { debug_break(); }
@@ -34,7 +40,7 @@ DebugAssert_ :: (condition: bool, message: string = "", call := #caller_code) #e
 
 Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 {
-	#if (ASSERT_FAILURE_FUNC)
+	#if (GYLIB_ASSERT_FAILURE_FUNC)
 	{
 		callString := #run -> string {
 			callStringBuilder: String_Builder;
@@ -44,7 +50,7 @@ Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 		}
 		if (!condition)
 		{
-			if (!ASSERT_FAILURE_FUNC(message, callString)) { MyBreak(); }
+			if (!GYLIB_ASSERT_FAILURE_FUNC(message, callString)) { MyBreak(); }
 		}
 	}
 	else { Assert_(condition, message, call); }
@@ -64,5 +70,28 @@ NotNull3_ :: (pointer1: $A, pointer2: $B, pointer3: $C, message: string = "", ca
 
 Unimplemented  :: () { Assert(false, "This code path is unimplemented!"); }
 Unimplemented_ :: () { Assert_(false, "This code path is unimplemented!"); }
+
+}
+else
+{
+
+MyBreak        :: () { /* do nothing */ }
+MyDebugBreak   :: () { /* do nothing */ }
+Assert_        :: (condition: bool, message: string = "") { /* do nothing */ }
+DebugAssert_   :: (condition: bool, message: string = "") { /* do nothing */ }
+Assert         :: (condition: bool, message: string = "") { /* do nothing */ }
+DebugAssert    :: (condition: bool, message: string = "") { /* do nothing */ }
+AssertIf       :: (precondition: bool, expression: bool, message: string = "") { /* do nothing */ }
+AssertIf_      :: (precondition: bool, expression: bool, message: string = "") { /* do nothing */ }
+NotNull        :: (pointer: $T, message: string = "") { /* do nothing */ }
+NotNull2       :: (pointer1: $A, pointer2: $B, message: string = "") { /* do nothing */ }
+NotNull3       :: (pointer1: $A, pointer2: $B, pointer3: $C, message: string = "") { /* do nothing */ }
+NotNull_       :: (pointer: $T, message: string = "") { /* do nothing */ }
+NotNull2_      :: (pointer1: $A, pointer2: $B, message: string = "") { /* do nothing */ }
+NotNull3_      :: (pointer1: $A, pointer2: $B, pointer3: $C, message: string = "") { /* do nothing */ }
+Unimplemented  :: () { /* do nothing */ }
+Unimplemented_ :: () { /* do nothing */ }
+
+}
 
 #run Debug.init();
