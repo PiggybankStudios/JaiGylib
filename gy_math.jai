@@ -9,7 +9,7 @@
 //      The answer for now is "no", we are not going to do ANY suffixing or variants in this file
 
 BasicallyEqual    :: inline (left: $A, right: $B, epsilon: $C = DEFAULT_EPSILON) -> bool
-#modify { A_:=A;B_:=B;C_:=C; result := AnyFloatUpcast3(*A_, *B_, *C_); A=A_;B=B_;C=C_; return result; } //TODO: shorten this when compiler bug is fixed
+#modify { return AnyFloatUpcast3(*A, *B, *C); }
 {
 	return (AbsF(left - right) <= epsilon);
 }
@@ -84,7 +84,7 @@ ConvertSampleToFloat :: inline (sample: $T, $floatType: Type) -> floatType
 //       /
 //0 ____/start
 LinearStep :: inline (animAmount: $A, start: $B, end: $C) -> A
-#modify { A_:=A;B_:=B;C_:=C; result := AnyFloatUpcast3(*A_, *B_, *C_); A=A_;B=B_;C=C_; return result; } //TODO: shorten this when compiler bug is fixed
+#modify { return AnyFloatUpcast3(*A, *B, *C); }
 {
 	if (start == end) { return cast(A)(ifx (animAmount >= start) then 1 else 0); }
 	return clamp((animAmount - start) / (end - start), 0, 1);
@@ -92,7 +92,7 @@ LinearStep :: inline (animAmount: $A, start: $B, end: $C) -> A
 //  start /\ end   1
 //0 _____/  \_____
 LinearSpike :: inline (animAmount: $A, start: $B, end: $C) -> A
-#modify { A_:=A;B_:=B;C_:=C; result := AnyFloatUpcast3(*A_, *B_, *C_); A=A_;B=B_;C=C_; return result; } //TODO: shorten this when compiler bug is fixed
+#modify { return AnyFloatUpcast3(*A, *B, *C); }
 {
 	if (start == end) { return cast(A)(ifx (animAmount == start) then 1 else 0); }
 	subAnimAmount := SubAnimAmount(animAmount, start, end);
@@ -102,7 +102,7 @@ LinearSpike :: inline (animAmount: $A, start: $B, end: $C) -> A
 AngleFix :: inline (angle: $T) -> T #modify { return AnyFloat(T); } { return ModF(angle, cast(T)TwoPi64); }
 
 AngleDiff :: inline (left: $A, right: $B) -> A
-#modify { A_:=A;B_:=B; result := AnyFloatUpcast2(*A_, *B_); A=A_;B=B_; return result; } //TODO: shorten this when compiler bug is fixed
+#modify { return AnyFloatUpcast2(*A, *B); }
 {
 	fixedLeft := AngleFix(left);
 	fixedRight := AngleFix(right);
@@ -117,7 +117,7 @@ AngleFlipVertical :: inline (angle: $T) -> T #modify { return AnyFloat(T); } { r
 AngleFlipHorizontal :: inline (angle: $T) -> T #modify { return AnyFloat(T); } { return AngleFix(Pi32 - angle); }
 
 AngleLerp :: inline (angleStart: $A, angleEnd: $B, amount: $C) -> A
-#modify { A_:=A;B_:=B;C_:=C; result := AnyFloatUpcast3(*A_, *B_, *C_); A=A_;B=B_;C=C_; return result; } //TODO: shorten this when compiler bug is fixed
+#modify { return AnyFloatUpcast3(*A, *B, *C); }
 {
 	start := AngleFix(angleStart);
 	end := AngleFix(angleEnd);
