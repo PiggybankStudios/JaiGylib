@@ -111,7 +111,7 @@ GetEllipseArcCurveCenterAndAngles :: (start: v2, radius: v2, axisAngle: float32,
 		/
 		((radius.x*radius.x) * (posPrime.y*posPrime.y) + (radius.y*radius.y) * (posPrime.x*posPrime.x))
 	);
-	if (solutionCeof < 0) { return (false, Vec2_Zero, 0, 0); }
+	if (solutionCeof < 0) { return false, Vec2_Zero, 0, 0; }
 	solutionCeof = SqrtF32(solutionCeof);
 	centerPrime := Vec2_Zero;
 	centerPrime.x = solutionCeof * (( radius.x * posPrime.y) / radius.y);
@@ -132,7 +132,7 @@ GetEllipseArcCurveCenterAndAngles :: (start: v2, radius: v2, axisAngle: float32,
 	if (!IsFlagSet(arcFlags, .Sweep) && angleDelta > 0) { angleDelta -= TwoPi32; }
 	if (IsFlagSet(arcFlags, .Sweep) && angleDelta < 0) { angleDelta += TwoPi32; }
 	
-	return (true, center, startAngle, angleDelta);
+	return true, center, startAngle, angleDelta;
 }
 
 EllipseArcCurveStartEnd :: (start: v2, radius: v2, axisAngle: float32, arcFlags: BezierPathPartArcFlag, end: v2, time: float32) -> v2

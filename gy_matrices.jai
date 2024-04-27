@@ -151,7 +151,7 @@ Mat4Adjoint :: (matrix: mat4) -> mat4
 Mat4Inverse :: (matrix: mat4) -> (mat4, success: bool)
 {
 	determinant := Mat4Determinant(matrix);
-	if (determinant == 0) { return (Mat4_Identity, false); }
+	if (determinant == 0) { return Mat4_Identity, false; }
 	result := Mat4Adjoint(matrix);
 	result.r0c0 = result.r0c0 / determinant;
 	result.r0c1 = result.r0c1 / determinant;
@@ -169,7 +169,7 @@ Mat4Inverse :: (matrix: mat4) -> (mat4, success: bool)
 	result.r3c1 = result.r3c1 / determinant;
 	result.r3c2 = result.r3c2 / determinant;
 	result.r3c3 = result.r3c3 / determinant;
-	return (result, true);
+	return result, true;
 }
 
 // +--------------------------------------------------------------+
@@ -225,7 +225,7 @@ Mat4MultiplyVec3 :: (matrix: mat4, vector: v3, includeTranslation := true) -> (v
 	);
 	wValue := matrix.r3c0*vector.x + matrix.r3c1*vector.y + matrix.r3c2*vector.z + matrix.r3c3*1.0;
 	result /= wValue;
-	return (result, wValue);
+	return result, wValue;
 }
 Mat4MultiplyRightVec3 :: (vector: v3, matrix: mat4) -> (v3, w: float32)
 {
@@ -236,7 +236,7 @@ Mat4MultiplyRightVec3 :: (vector: v3, matrix: mat4) -> (v3, w: float32)
 	);
 	wValue := matrix.r0c3*vector.x + matrix.r1c3*vector.y + matrix.r2c3*vector.z + matrix.r3c3*1.0;
 	result /= wValue;
-	return (result, wValue);
+	return result, wValue;
 }
 Mat4MultiplyVec4 :: (matrix: mat4, vector: v4, divideByW := true) -> v4
 {

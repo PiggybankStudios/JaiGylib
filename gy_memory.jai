@@ -1078,7 +1078,7 @@ FreeMem :: (arena: *MemArena, allocPntr: *void, allocSize: u64 = 0, ignoreNullpt
 	Assert(arena.type != .None, "Tried to free from uninitialized arena");
 	Assert(ignoreNullptr || allocPntr != null);
 	// PrintLine_D("FreeMem(arena=%, allocPntr=%, allocSize=%, ignoreNullptr=%)", arena, allocPntr, allocSize, ignoreNullptr);
-	if (allocPntr == null) { return (false, 0); }
+	if (allocPntr == null) { return false, 0; }
 	
 	
 	if (IsFlagSet(arena.flags, .BreakOnFree) && (arena.debugBreakThreshold == 0 || allocSize >= arena.debugBreakThreshold))
@@ -1365,13 +1365,13 @@ FreeMem :: (arena: *MemArena, allocPntr: *void, allocSize: u64 = 0, ignoreNullpt
 		}
 	}
 	
-	return (result, resultOldSize);
+	return result, resultOldSize;
 }
 
 HardFreeMem :: inline (arena: *MemArena, allocPntr: *void) { FreeMem(arena, allocPntr, 0, false); }
 SoftFreeMem :: inline (arena: *MemArena, allocPntr: *void) { FreeMem(arena, allocPntr, 0, true);  }
 
-FreeString :: inline (arena: *MemArena, str: *string) -> (bool, oldSize: u64) { success, oldSize := FreeMem(arena, str.data, cast(u64)str.count); return (success, oldSize); }
+FreeString :: inline (arena: *MemArena, str: *string) -> (bool, oldSize: u64) { success, oldSize := FreeMem(arena, str.data, cast(u64)str.count); return success, oldSize; }
 
 FreeBufferArena :: inline (bufferArena: *MemArena, sourceArena: *MemArena) { FreeMem(sourceArena, bufferArena.mainPntr, bufferArena.size); }
 
@@ -1393,19 +1393,19 @@ ReallocMem :: (arena: *MemArena, allocPntr: *void, newSize: u64, oldSize: u64 = 
 	alignment := ifx (alignOverride != .None) then alignOverride else arena.alignment;
 	if (newSize == oldSize && (allocPntr != null || oldSize != 0) && IsAlignedTo(allocPntr, alignment)) //not resizing, just keep the memory where it's at
 	{
-		return (allocPntr, oldSize);
+		return allocPntr, oldSize;
 	}
 	if (newSize == 0) //Resizing to 0 is basically freeing
 	{
 		freeSuccess, freeOldSize := FreeMem(arena, allocPntr, oldSize, ignoreNullptr);
 		Assert(freeSuccess, "Failed attempt to free memory in arena when Realloc'd to 0 bytes");
-		return (null, freeOldSize);
+		return null, freeOldSize;
 	}
 	if (allocPntr == null)
 	{
 		Assert(oldSize == 0);
 		Assert(newSize > 0);
-		return (AllocMem(arena, newSize), 0);
+		return AllocMem(arena, newSize), 0;
 	}
 	
 	knownOldSize := (oldSize != 0 || allocPntr == null);
@@ -1807,7 +1807,10 @@ PrintInArenaWith :: (arena: *MemArena, $builder: PrintInArenaBuilder, fixedBuffe
 		return "";
 	}
 	
-	result := builder_to_string(*stringBuilder, MemArenaGetAllocator(arena), do_reset=true);
+	oldAllocator := context.allocator;
+	context.allocator = MemArenaGetAllocator(arena);
+	result := builder_to_string(*stringBuilder, do_reset=true);
+	context.allocator = oldAllocator;
 	return result;
 }
 PrintInArenaUsingTemp :: inline (arena: *MemArena, formatString: string, args: ..Any) -> string

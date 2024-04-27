@@ -634,7 +634,7 @@ CompileShader :: (output: *Shader, shaderSourceStr: string) -> bool
 ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: string)
 {
 	fragmentIdentIndex := find_index_from_left(sourceStr, "FRAGMENT_SHADER");
-	if (fragmentIdentIndex < 0) { return (sourceStr, ""); }
+	if (fragmentIdentIndex < 0) { return sourceStr, ""; }
 	
 	startOfLine := fragmentIdentIndex;
 	while (startOfLine > 0 && sourceStr.data[startOfLine] != #char "\n") { startOfLine -= 1; }
@@ -644,7 +644,7 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 	
 	vertexSource := slice(sourceStr, 0, startOfLine);
 	fragmentSource := slice(sourceStr, endOfLine, sourceStr.count - endOfLine);
-	return (vertexSource, fragmentSource);
+	return vertexSource, fragmentSource;
 }
 
 #if (GRAPHICS_API == .D3D11)

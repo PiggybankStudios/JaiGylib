@@ -54,7 +54,7 @@ MeowHashSimple :: inline (bufferPntr: *void, numBytes: u64) -> (u32, u32, u32, u
 {
 	#asm { HashReg: vec; }
 	Meow.MeowHash(Meow.MeowDefaultSeed, numBytes, bufferPntr, HashReg);
-	return (Meow.MeowU32From(HashReg, 0), Meow.MeowU32From(HashReg, 1), Meow.MeowU32From(HashReg, 2), Meow.MeowU32From(HashReg, 3));
+	return Meow.MeowU32From(HashReg, 0), Meow.MeowU32From(HashReg, 1), Meow.MeowU32From(HashReg, 2), Meow.MeowU32From(HashReg, 3);
 }
 
 // +--------------------------------------------------------------+
