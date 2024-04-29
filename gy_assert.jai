@@ -72,7 +72,7 @@ Unimplemented  :: () { Assert(false, "This code path is unimplemented!"); }
 Unimplemented_ :: () { Assert_(false, "This code path is unimplemented!"); }
 
 }
-else
+else //!GYLIB_ASSERTIONS_ENABLED
 {
 
 MyBreak        :: () { /* do nothing */ }

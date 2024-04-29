@@ -196,14 +196,14 @@ Shader :: struct
 }
 else #if (GRAPHICS_API == .D3D11)
 {
-	//TODO: Implement me!
+	//TODO: Implement me?
 }
 else { #assert(false); }
 
 // +--------------------------------------------------------------+
 // |                      Texture Functions                       |
 // +--------------------------------------------------------------+
-CreateTexture :: (output: *Texture, pixelData: PixelData, options: TextureOptions = .{}, reverseByteOrder := false) -> bool
+CreateTexture :: (graphicsContext: *GraphicsContext, output: *Texture, pixelData: PixelData, options: TextureOptions = .{}, reverseByteOrder := false) -> bool
 {
 	NotNull(pixelData.dataPntr);
 	NotNull(output);
@@ -294,7 +294,7 @@ CreateTexture :: (output: *Texture, pixelData: PixelData, options: TextureOption
 		textureInit.pSysMem = pixelData.dataPntr;
 		textureInit.SysMemPitch = xx pixelData.rowSize;
 		
-		createResult := ID3D11Device_CreateTexture2D(globals.graphicsContext.d3dDevice, *textureDesc, *textureInit, *output.id.tex2dId);
+		createResult := ID3D11Device_CreateTexture2D(graphicsContext.d3dDevice, *textureDesc, *textureInit, *output.id.tex2dId);
 		if (Windows.FAILED(createResult)) { WriteLine_E("CreateTexture2D failed!"); return false; }
 		
 		viewDesc: D3D11_SHADER_RESOURCE_VIEW_DESC;
@@ -303,7 +303,7 @@ CreateTexture :: (output: *Texture, pixelData: PixelData, options: TextureOption
 		viewDesc.Texture2D.MipLevels = textureDesc.MipLevels;
 		viewDesc.Texture2D.MostDetailedMip = 0;
 		
-		createResult = ID3D11Device_CreateShaderResourceView(globals.graphicsContext.d3dDevice, output.id.tex2dId, *viewDesc, *output.id.viewId);
+		createResult = ID3D11Device_CreateShaderResourceView(graphicsContext.d3dDevice, output.id.tex2dId, *viewDesc, *output.id.viewId);
 		if (Windows.FAILED(createResult)) { WriteLine_E("CreateShaderResourceView failed!"); return false; }
 		
 		samplerDesc: D3D11_SAMPLER_DESC;
@@ -320,7 +320,7 @@ CreateTexture :: (output: *Texture, pixelData: PixelData, options: TextureOption
 		samplerDesc.BorderColor[3] = 0;
 		samplerDesc.MinLOD = 0;
 		samplerDesc.MaxLOD = xx D3D11_FLOAT32_MAX;
-		createResult = ID3D11Device_CreateSamplerState(globals.graphicsContext.d3dDevice, *samplerDesc, *output.id.samplerId);
+		createResult = ID3D11Device_CreateSamplerState(graphicsContext.d3dDevice, *samplerDesc, *output.id.samplerId);
 		if (Windows.FAILED(createResult)) { WriteLine_E("CreateSamplerState failed!"); return false; }
 	}
 	else { #assert(false); }
@@ -328,7 +328,7 @@ CreateTexture :: (output: *Texture, pixelData: PixelData, options: TextureOption
 	return true;
 }
 
-LoadTexture :: (output: *Texture, filePath: string, options: TextureOptions = .{}) -> bool
+LoadTexture :: (graphicsContext: *GraphicsContext, output: *Texture, filePath: string, options: TextureOptions = .{}) -> bool
 {
 	NotNull(output);
 	
@@ -348,7 +348,7 @@ LoadTexture :: (output: *Texture, filePath: string, options: TextureOptions = .{
 	
 	pixelData := NewPixelData(imageSize, size_of(u32), stbPixelPntr);
 	
-	return CreateTexture(output, pixelData, options);
+	return CreateTexture(graphicsContext, output, pixelData, options);
 }
 
 NewPixelData :: (dimensions: v2i, pixelSize: u8, dataPntr: *void) -> PixelData
@@ -365,7 +365,7 @@ NewPixelData :: (dimensions: v2i, pixelSize: u8, dataPntr: *void) -> PixelData
 // +--------------------------------------------------------------+
 // |                   Vertex Buffer Functions                    |
 // +--------------------------------------------------------------+
-_CreateVertexBuffer :: (output: *VertexBuffer, vertices: []$T, indices: []u32 = u32.[]) -> bool
+_CreateVertexBuffer :: (graphicsContext: *GraphicsContext, output: *VertexBuffer, vertices: []$T, indices: []u32 = u32.[]) -> bool
 {
 	ClearPointer(output);
 	
@@ -434,7 +434,7 @@ _CreateVertexBuffer :: (output: *VertexBuffer, vertices: []$T, indices: []u32 = 
 		vertInitData: D3D11_SUBRESOURCE_DATA;
 		vertInitData.pSysMem = vertices.data;
 		
-		createResult := ID3D11Device_CreateBuffer(globals.graphicsContext.d3dDevice, *vertBufferDesc, *vertInitData, *output.id.vertId);
+		createResult := ID3D11Device_CreateBuffer(graphicsContext.d3dDevice, *vertBufferDesc, *vertInitData, *output.id.vertId);
 		if (Windows.FAILED(createResult))
 		{
 			PrintLine_E("CreateBuffer failed: %", createResult);
@@ -452,7 +452,7 @@ _CreateVertexBuffer :: (output: *VertexBuffer, vertices: []$T, indices: []u32 = 
 			indexInitData: D3D11_SUBRESOURCE_DATA;
 			indexInitData.pSysMem = indices.data;
 			
-			createResult = ID3D11Device_CreateBuffer(globals.graphicsContext.d3dDevice, *indexBufferDesc, *indexInitData, *output.id.indexId);
+			createResult = ID3D11Device_CreateBuffer(graphicsContext.d3dDevice, *indexBufferDesc, *indexInitData, *output.id.indexId);
 			if (Windows.FAILED(createResult))
 			{
 				PrintLine_E("CreateBuffer failed: %", createResult);
@@ -480,7 +480,7 @@ CreateVertexBuffer :: #bake_constants _CreateVertexBuffer(T=Vertex3D);
 // |                       Shader Functions                       |
 // +--------------------------------------------------------------+
 //NOTE: vertexShaderSource acts as the ONLY source when doing D3D11. fragmentShaderSource does nothing.
-CompileShader :: (output: *Shader, shaderSourceStr: string) -> bool
+CompileShader :: (graphicsContext: *GraphicsContext, output: *Shader, shaderSourceStr: string) -> bool
 {
 	ClearPointer(output);
 	#if (GRAPHICS_API == .OPENGL)
@@ -556,7 +556,7 @@ CompileShader :: (output: *Shader, shaderSourceStr: string) -> bool
 		}
 		NotNull(vertSource.data);
 		
-		createResult := ID3D11Device_CreateVertexShader(globals.graphicsContext.d3dDevice, vertSource.data, cast(u64)vertSource.count, null, *output.id.vertId);
+		createResult := ID3D11Device_CreateVertexShader(graphicsContext.d3dDevice, vertSource.data, cast(u64)vertSource.count, null, *output.id.vertId);
 		if (Windows.FAILED(createResult))
 		{
 		    PrintLine_E("CreateVertexShader failed: %", createResult);
@@ -596,7 +596,7 @@ CompileShader :: (output: *Shader, shaderSourceStr: string) -> bool
 		inputLayout[2].InstanceDataStepRate = 0;
 		
 		// Create the input layout 
-		createResult = ID3D11Device_CreateInputLayout(globals.graphicsContext.d3dDevice, inputLayout.data, cast(u32)inputLayout.count, vertSource.data, cast(u64)vertSource.count, *output.id.layoutId);
+		createResult = ID3D11Device_CreateInputLayout(graphicsContext.d3dDevice, inputLayout.data, cast(u32)inputLayout.count, vertSource.data, cast(u64)vertSource.count, *output.id.layoutId);
 		free(vertSource);
 		if (Windows.FAILED(createResult))
 		{
@@ -605,7 +605,7 @@ CompileShader :: (output: *Shader, shaderSourceStr: string) -> bool
 		}
 		
 		// Set the input layout 
-		ID3D11DeviceContext_IASetInputLayout(globals.graphicsContext.d3dContext, output.id.layoutId); 
+		ID3D11DeviceContext_IASetInputLayout(graphicsContext.d3dContext, output.id.layoutId); 
 		
 		// +==============================+
 		// |     Compile Pixel Shader     |
@@ -618,7 +618,7 @@ CompileShader :: (output: *Shader, shaderSourceStr: string) -> bool
 		} 
 		
 		// Create the pixel shader 
-		createResult = ID3D11Device_CreatePixelShader(globals.graphicsContext.d3dDevice, pixShader.data, cast(u64)pixShader.count, null, *output.id.pixId);
+		createResult = ID3D11Device_CreatePixelShader(graphicsContext.d3dDevice, pixShader.data, cast(u64)pixShader.count, null, *output.id.pixId);
 		free(pixShader);
 		if (Windows.FAILED(createResult))
 		{
@@ -673,10 +673,10 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 		{
 			free(bytecode);
 			if (errors) { PrintLine_E("Error msg: %", errors); }
-			return ("", compileResult);
+			return "", compileResult;
 		}
 		
-		return (bytecode, compileResult);
+		return bytecode, compileResult;
 	}
 } //#if (GRAPHICS_API == .D3D11)
 
@@ -696,7 +696,7 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 		}
 	}
 	
-	CreateShaderConstantsBuffer :: (output: *ShaderConstantsBuffer, type: ConstantsBufferType) -> bool
+	CreateShaderConstantsBuffer :: (graphicsContext: *GraphicsContext, output: *ShaderConstantsBuffer, type: ConstantsBufferType) -> bool
 	{
 		ClearPointer(output);
 		output.type = type;
@@ -706,7 +706,7 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 		bufferDesc.ByteWidth = xx bufferTypeSize;
 		bufferDesc.BindFlags = .CONSTANT_BUFFER;
 		bufferDesc.CPUAccessFlags = .WRITE;
-		ID3D11Device_CreateBuffer(globals.graphicsContext.d3dDevice, *bufferDesc, null, *output.id);
+		ID3D11Device_CreateBuffer(graphicsContext.d3dDevice, *bufferDesc, null, *output.id);
 		DebugAssert(output.id != null);
 		return (output.id != null);
 	}
