@@ -4,8 +4,11 @@
 #if (GYLIB_ASSERTIONS_ENABLED)
 {
 
+#import "Basic";
 #import "Compiler";
 #import "Program_Print";
+
+GylibAssertFailureCallback: (string, string) -> bool = null;
 
 MyBreak :: inline ()
 {
@@ -40,7 +43,7 @@ DebugAssert_ :: (condition: bool, message: string = "", call := #caller_code) #e
 
 Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 {
-	#if (GYLIB_ASSERT_FAILURE_FUNC)
+	if (GylibAssertFailureCallback != null)
 	{
 		callString := #run -> string {
 			callStringBuilder: String_Builder;
@@ -50,7 +53,7 @@ Assert :: (condition: bool, message: string = "", call := #caller_code) #expand
 		}
 		if (!condition)
 		{
-			if (!GYLIB_ASSERT_FAILURE_FUNC(message, callString)) { MyBreak(); }
+			if (!GylibAssertFailureCallback(message, callString)) { MyBreak(); }
 		}
 	}
 	else { Assert_(condition, message, call); }

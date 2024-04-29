@@ -1,15 +1,13 @@
 
+// This file is meant to be #load-ed directly
 // These constants are required to be defined by the #loading context
-// GYLIB_DEBUG_BUILD             :: DEBUG_BUILD;
-// GYLIB_ASSERT_FAILURE_FUNC     :: null;
-// GYLIB_DEBUG_OUTPUT_FUNC       :: null;
-// GYLIB_DEBUG_OUTPUT_LVL_PREFIX :: false;
-// GYLIB_RUN_TESTS               :: false;
-// GYLIB_MINIMAL_FEATURES        :: false;
-// GYLIB_GRAPHICAL_CAPS          :: true; //only needed if !GYLIB_MINIMAL_FEATURES
-// GRAPHICS_API                  :: GraphicsApi.OPENGL; //only needed if GYLIB_GRAPHICAL_CAPS
-// WINDOW_API                    :: GraphicsApi.GLFW; //only needed if GYLIB_GRAPHICAL_CAPS
-// GYLIB_ASSERTIONS_ENABLED      :: true;
+#assert(GYLIB_GRAPHICS_API            || true);
+#assert(GYLIB_WINDOW_API              || true);
+#assert(GYLIB_DEBUG_BUILD             || true);
+#assert(GYLIB_DEBUG_OUTPUT_LVL_PREFIX || true);
+#assert(GYLIB_RUN_TESTS               || true);
+#assert(GYLIB_MINIMAL_FEATURES        || true);
+#assert(GYLIB_ASSERTIONS_ENABLED      || true);
 
 #import "Basic";
 #import "Math";
@@ -31,7 +29,7 @@ else { #import "POSIX"; }
 #load "gy_compile_time.jai";
 #load "gy_time.jai";
 
-//Anything that isn't needed by something like a meta-program should go in this #if
+// Anything that isn't needed by something like a meta-program should go in this #if
 #if (!GYLIB_MINIMAL_FEATURES)
 {
 	xxHash :: #import "xxHash";
@@ -58,5 +56,3 @@ else { #import "POSIX"; }
 		#load "gy_graphics.jai";
 	}
 }
-
-

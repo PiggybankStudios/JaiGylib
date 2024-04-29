@@ -713,7 +713,7 @@ Dir2FromIndex :: (index: u64) -> Dir2
 		case 1; return .Down;
 		case 2; return .Left;
 		case 3; return .Up;
-		case; assert(false); return Dir2_None;
+		case; Assert(false); return Dir2_None;
 	}
 }
 Dir2FromCwIndex :: (index: u64, startingDir: Dir2 = .Right) -> Dir2
@@ -725,7 +725,7 @@ Dir2FromCwIndex :: (index: u64, startingDir: Dir2 = .Right) -> Dir2
 		case 1; return .Down;
 		case 2; return .Left;
 		case 3; return .Up;
-		case; assert(false); return Dir2_None;
+		case; Assert(false); return Dir2_None;
 	}
 }
 Dir2FromCcwIndex :: (index: u64, startingDir: Dir2 = .Right) -> Dir2
@@ -737,7 +737,7 @@ Dir2FromCcwIndex :: (index: u64, startingDir: Dir2 = .Right) -> Dir2
 		case 1; return .Up;
 		case 2; return .Left;
 		case 3; return .Down;
-		case; assert(false); return Dir2_None;
+		case; Assert(false); return Dir2_None;
 	}
 }
 Dir2ExFromIndex :: (index: u64) -> Dir2Ex
@@ -752,7 +752,7 @@ Dir2ExFromIndex :: (index: u64) -> Dir2Ex
 		case 5; return .TopRight;
 		case 6; return .BottomRight;
 		case 7; return .BottomLeft;
-		case; assert(false); return Dir2Ex_None;
+		case; Assert(false); return Dir2Ex_None;
 	}
 }
 Dir2ExFromCwIndex :: (index: u64) -> Dir2Ex
@@ -767,7 +767,7 @@ Dir2ExFromCwIndex :: (index: u64) -> Dir2Ex
 		case 5; return .TopLeft;
 		case 6; return .Up;
 		case 7; return .TopRight;
-		case; assert(false); return Dir2Ex_None;
+		case; Assert(false); return Dir2Ex_None;
 	}
 }
 Dir2ExFromCcwIndex :: (index: u64) -> Dir2Ex
@@ -782,7 +782,7 @@ Dir2ExFromCcwIndex :: (index: u64) -> Dir2Ex
 		case 5; return .BottomLeft;
 		case 6; return .Down;
 		case 7; return .BottomRight;
-		case; assert(false); return Dir2Ex_None;
+		case; Assert(false); return Dir2Ex_None;
 	}
 }
 Dir3FromIndex :: (index: u64) -> Dir3
@@ -795,7 +795,7 @@ Dir3FromIndex :: (index: u64) -> Dir3
 		case 3; return .Down;
 		case 4; return .Forward;
 		case 5; return .Backward;
-		case; assert(false); return Dir3_None;
+		case; Assert(false); return Dir3_None;
 	}
 }
 Dir3ExFromIndex :: (index: u64) -> Dir3Ex
@@ -816,7 +816,7 @@ Dir3ExFromIndex :: (index: u64) -> Dir3Ex
 		case 11; return .TopRightBack;
 		case 12; return .TopRightFront;
 		case 13; return .TopLeftFront;
-		case; assert(false); return Dir3Ex_None;
+		case; Assert(false); return Dir3Ex_None;
 	}
 }
 
@@ -1160,26 +1160,26 @@ TestDirections :: ()
 	for 0..Dir2_Count-1
 	{
 		direction := cast(Dir2)(1 << it);
-		assert(direction == Dir2FromIndex(it));
-		assert(direction == Dir2FromIndex(GetDir2Index(direction)));
+		Assert(direction == Dir2FromIndex(it));
+		Assert(direction == Dir2FromIndex(GetDir2Index(direction)));
 	}
 	for 0..Dir2Ex_Count-1
 	{
 		direction := cast(Dir2Ex)(1 << it);
-		assert(direction == Dir2ExFromIndex(it));
-		assert(direction == Dir2ExFromIndex(GetDir2ExIndex(direction)));
+		Assert(direction == Dir2ExFromIndex(it));
+		Assert(direction == Dir2ExFromIndex(GetDir2ExIndex(direction)));
 	}
 	for 0..Dir3_Count-1
 	{
 		direction := cast(Dir3)(1 << it);
-		assert(direction == Dir3FromIndex(it));
-		assert(direction == Dir3FromIndex(GetDir3Index(direction)));
+		Assert(direction == Dir3FromIndex(it));
+		Assert(direction == Dir3FromIndex(GetDir3Index(direction)));
 	}
 	for 0..Dir3Ex_Count-1
 	{
 		direction := cast(Dir3Ex)(1 << it);
-		assert(direction == Dir3ExFromIndex(it));
-		assert(direction == Dir3ExFromIndex(GetDir3ExIndex(direction)));
+		Assert(direction == Dir3ExFromIndex(it));
+		Assert(direction == Dir3ExFromIndex(GetDir3ExIndex(direction)));
 	}
 }
 // #if GYLIB_RUN_TESTS { #run TestDirections(); }

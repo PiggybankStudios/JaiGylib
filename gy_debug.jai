@@ -14,6 +14,8 @@ DbgLevel :: enum u8
 }
 DbgLevel_NumLevels :: cast(u8)(#run enum_values_as_s64(DbgLevel).count);
 
+GylibDebugOutputCallback: (u8, string) = null;
+
 DebugOutput :: (dbgLevel: DbgLevel, doNewLine: bool, message: string)
 {
 	#if (GYLIB_DEBUG_OUTPUT_LVL_PREFIX)
@@ -25,9 +27,9 @@ DebugOutput :: (dbgLevel: DbgLevel, doNewLine: bool, message: string)
 		outputLine := tprint("%0%", message, ifx doNewLine then "\n" else "");
 	}
 	
-	#if (GYLIB_DEBUG_OUTPUT_FUNC)
+	if (GylibDebugOutputCallback != null)
 	{
-		GYLIB_DEBUG_OUTPUT_FUNC(cast(u8)dbgLevel, outputLine);
+		GylibDebugOutputCallback(cast(u8)dbgLevel, outputLine);
 	}
 	else
 	{

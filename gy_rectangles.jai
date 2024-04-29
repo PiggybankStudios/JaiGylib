@@ -476,7 +476,7 @@ RecAlign :: (rectanglePntr: *rec, alignmentScale: float32 = 1)
 }
 RecAlignTopLeft :: (rectanglePntr: *rec, alignmentScale: float32 = 1)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	if (alignmentScale > 0)
 	{
 		rectanglePntr.x = RoundF32(rectanglePntr.x * alignmentScale) / alignmentScale;
@@ -485,7 +485,7 @@ RecAlignTopLeft :: (rectanglePntr: *rec, alignmentScale: float32 = 1)
 }
 RecAlignSize :: (rectanglePntr: *rec, alignmentScale: float32 = 1)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	if (alignmentScale > 0)
 	{
 		rectanglePntr.width  = RoundF32(rectanglePntr.width  * alignmentScale) / alignmentScale;
@@ -495,45 +495,45 @@ RecAlignSize :: (rectanglePntr: *rec, alignmentScale: float32 = 1)
 
 RecLayoutLeftOf :: (rectanglePntr: *rec, posOfThingToRight: float32, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.x = posOfThingToRight - padding - rectanglePntr.width;
 }
 RecLayoutLeftOf :: (rectanglePntr: *rec, recToRight: rec, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.x = recToRight.x - padding - rectanglePntr.width;
 }
 
 RecLayoutRightOf :: (rectanglePntr: *rec, posOfThingToLeft: float32, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.x = posOfThingToLeft + padding;
 }
 RecLayoutRightOf :: (rectanglePntr: *rec, recToLeft: rec, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.x = recToLeft.x + recToLeft.width + padding;
 }
 
 RecLayoutAbove :: (rectanglePntr: *rec, posOfThingBelow: float32, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.y = posOfThingBelow - padding - rectanglePntr.height;
 }
 RecLayoutAbove :: (rectanglePntr: *rec, recBelow: rec, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.y = recBelow.y - padding - rectanglePntr.height;
 }
 
 RecLayoutBelow :: (rectanglePntr: *rec, posOfThingAbove: float32, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.y = posOfThingAbove + padding;
 }
 RecLayoutBelow :: (rectanglePntr: *rec, recAbove: rec, padding: float32 = 0)
 {
-	assert(rectanglePntr != null);
+	Assert(rectanglePntr != null);
 	rectanglePntr.y = recAbove.y + recAbove.height + padding;
 }
 
@@ -550,7 +550,7 @@ RecLayout :: (rectanglePntr: *rec, referenceRec: rec, side: Dir2, padding: float
 		case .Down;
 		RecLayoutBelow(rectanglePntr, referenceRec, padding);
 		case;
-		assert(false); //TODO: Add a message?
+		Assert(false); //TODO: Add a message?
 	}
 }
 
@@ -574,24 +574,24 @@ RecLayout :: (rectanglePntr: *rec, referenceRec: rec, side: Dir2, padding: float
 TestRecs :: ()
 {
 	test1: rec;
-	assert(test1.x == 0 && test1.y == 0 && test1.width == 0 && test1.height == 0);
-	assert(test1 == test1);
+	Assert(test1.x == 0 && test1.y == 0 && test1.width == 0 && test1.height == 0);
+	Assert(test1 == test1);
 	test1 = Rec_Default;
-	assert(test1 == rec.{ 0, 0, 1, 1 });
+	Assert(test1 == rec.{ 0, 0, 1, 1 });
 	test1 = rec.{ 1, 2, 3, 4 };
-	assert(test1.component[2] == 3);
-	assert(test1.size.y == 4);
-	assert(test1.topLeft.x == 1);
+	Assert(test1.component[2] == 3);
+	Assert(test1.size.y == 4);
+	Assert(test1.topLeft.x == 1);
 	RecAlign(*test1);
 	
 	test2: reci;
-	assert(test2.x == 0 && test2.y == 0 && test2.width == 0 && test2.height == 0);
-	assert(test2 == test2);
+	Assert(test2.x == 0 && test2.y == 0 && test2.width == 0 && test2.height == 0);
+	Assert(test2 == test2);
 	test2 = Reci_Default;
-	assert(test2 == reci.{ 0, 0, 1, 1 });
+	Assert(test2 == reci.{ 0, 0, 1, 1 });
 	test2 = reci.{ 1, 2, 3, 4 };
-	assert(test2.component[2] == 3);
-	assert(test2.size.y == 4);
-	assert(test2.topLeft.x == 1);
+	Assert(test2.component[2] == 3);
+	Assert(test2.size.y == 4);
+	Assert(test2.topLeft.x == 1);
 }
 // #if GYLIB_RUN_TESTS { #run TestRecs(); }

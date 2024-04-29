@@ -588,10 +588,10 @@ TestColors :: ()
 {
 	color1: Color = Black;
 	color2: Color = White;
-	assert(color1 == color1);
-	assert(color1 != color2);
-	assert(ColorLerp(color2, color1, 0.5) == NewColor(128, 128, 128, 255));
-	assert(ColorLerp(color1, color2, 0.5) == NewColor(128, 128, 128, 255));
+	Assert(color1 == color1);
+	Assert(color1 != color2);
+	Assert(ColorLerp(color2, color1, 0.5) == NewColor(128, 128, 128, 255));
+	Assert(ColorLerp(color1, color2, 0.5) == NewColor(128, 128, 128, 255));
 	
 	random_seed(current_time_consensus().low);
 	for 0..100
@@ -617,7 +617,7 @@ TestColors :: ()
 	}
 	fastEnd := current_time_monotonic();
 	// print("slow: %ms\nfast: %ms\n", to_float64_seconds(slowEnd - slowStart) * 1000, to_float64_seconds(fastEnd - fastStart) * 1000);
-	// assert((slowEnd - slowStart) >= (fastEnd - fastStart));
+	// Assert((slowEnd - slowStart) >= (fastEnd - fastStart));
 	
 	
 	nicePurple := NewColor(128, 100, 159);
@@ -636,12 +636,12 @@ TestColors :: ()
 	// HSL         268°, 24%, 51%              Yxy         16.2067, 0.2784, 0.2289
 	// HSV         268°, 37%, 62%              YUV         115.0980, 21.6437, 11.3151
 	// XYZ         19.7173, 16.2067, 34.8899   Hunter-Lab  40.2576, 16.9745, -23.2043
-	assert(nicePurple.value == 0xFF80649F);
-	assert(ColorXyzBasicallyEqual(nicePurpleXyz, NewColorXyz(19.7173, 16.2067, 34.8899)));
-	assert(ColorHsvBasicallyEqual(nicePurpleHsv, NewColorHsv(268, 0.37, 0.62), 0.005));
-	assert(ColorLabBasicallyEqual(nicePurpleLab, NewColorLab(47.24, 23.38, -27.82), 0.005));
-	assert(ColorLchBasicallyEqual(nicePurpleLch, NewColorLch(47.245, 36.339, 310.048), 0.005));
-	assert(nicePurple == ConvertColorXyzToSrgb(ConvertColorLabToXyz(ConvertColorLchToLab(nicePurpleLch))));
-	assert(cast(s64)ColorIlluminant.A == 0);
+	Assert(nicePurple.value == 0xFF80649F);
+	Assert(ColorXyzBasicallyEqual(nicePurpleXyz, NewColorXyz(19.7173, 16.2067, 34.8899)));
+	Assert(ColorHsvBasicallyEqual(nicePurpleHsv, NewColorHsv(268, 0.37, 0.62), 0.005));
+	Assert(ColorLabBasicallyEqual(nicePurpleLab, NewColorLab(47.24, 23.38, -27.82), 0.005));
+	Assert(ColorLchBasicallyEqual(nicePurpleLch, NewColorLch(47.245, 36.339, 310.048), 0.005));
+	Assert(nicePurple == ConvertColorXyzToSrgb(ConvertColorLabToXyz(ConvertColorLchToLab(nicePurpleLch))));
+	Assert(cast(s64)ColorIlluminant.A == 0);
 }
 // #if GYLIB_RUN_TESTS { #run TestColors(); }

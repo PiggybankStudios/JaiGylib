@@ -579,15 +579,15 @@ _EaseEarlyInOut :: (input: $T) -> T
 // +--------------------------------------------------------------+
 TestEasing :: ()
 {
-	assert(EasingStyle.None == 0);
-	assert(EasingStyle_NumStyles == 33);
-	assert(GetEnumStr(EasingStyle.Linear) == "Linear");
+	Assert(EasingStyle.None == 0);
+	Assert(EasingStyle_NumStyles == 33);
+	Assert(GetEnumStr(EasingStyle.Linear) == "Linear");
 	parseSuccess, easingStyle := TryParseEnum("Linear", EasingStyle);
-	assert(parseSuccess == true && easingStyle == .Linear);
-	assert(IsValidEnumStr("Test", EasingStyle) == false);
-	assert(ParseEnumOr("Test", EasingStyle, .None) == .None);
-	assert(IsValidEnumStr("EarlyInOut", EasingStyle) == true);
-	assert(ParseEnum("EarlyInOut", EasingStyle) == .EarlyInOut);
+	Assert(parseSuccess == true && easingStyle == .Linear);
+	Assert(IsValidEnumStr("Test", EasingStyle) == false);
+	Assert(ParseEnumOr("Test", EasingStyle, .None) == .None);
+	Assert(IsValidEnumStr("EarlyInOut", EasingStyle) == true);
+	Assert(ParseEnum("EarlyInOut", EasingStyle) == .EarlyInOut);
 	
 	EaseElasticInOut(cast(float32)1.0);
 	EaseElasticInOut(cast(float64)1.0);

@@ -4,27 +4,34 @@
 // +--------------------------------------------------------------+
 #import "stb_image";
 
-#if (GRAPHICS_API == .OPENGL) { #import "GL"; }
-else #if (GRAPHICS_API == .D3D11)
+#if (GYLIB_GRAPHICS_API == .OPENGL) { OpenGL :: #import "GL"; }
+else #if (GYLIB_GRAPHICS_API == .D3D11)
 {
-	#import "d3d11";
-	#import "d3d_compiler";
-	#import "dxgi";
+	d3d  :: #import "d3d11";
+	d3dc :: #import "d3d_compiler";
+	dxgi :: #import "dxgi";
 }
-else #if (GRAPHICS_API == .D3D12)
+else #if (GYLIB_GRAPHICS_API == .D3D12)
 {
-	#import "d3d12";
-	#import "d3d_compiler";
-	#import "dxgi";
+	d3d  :: #import "d3d12";
+	d3dc :: #import "d3d_compiler";
+	dxgi :: #import "dxgi";
 }
-else #if (GRAPHICS_API == .VULKAN) { #import "Vulkan"; }
-else #if (GRAPHICS_API == .METAL) { #import "Metal"; }
+else #if (GYLIB_GRAPHICS_API == .VULKAN) { Vulkan :: #import "Vulkan"; }
+else #if (GYLIB_GRAPHICS_API == .METAL) { Metal :: #import "Metal"; }
 else { #assert(false); }
+
+// +--------------------------------------------------------------+
+// |                         File Usings                          |
+// +--------------------------------------------------------------+
+#scope_file
+using OpenGL;
+#scope_export
 
 // +--------------------------------------------------------------+
 // |                         Type Aliases                         |
 // +--------------------------------------------------------------+
-#if (GRAPHICS_API == .OPENGL)
+#if (GYLIB_GRAPHICS_API == .OPENGL)
 {
 	UniformLocation :: GLint;
 	ShaderId :: GLuint;
@@ -32,8 +39,8 @@ else { #assert(false); }
 	TextureId :: GLuint;
 	GraphicsContext :: struct
 	{
-		#if (WINDOW_API == .SDL) { glContext: *SDL_GLContext; }
-		#if (WINDOW_API == .CUSTOM) //TODO: Does this apply for GLFW as well?
+		#if (GYLIB_WINDOW_API == .SDL) { glContext: *SDL.SDL_GLContext; }
+		#if (GYLIB_WINDOW_API == .CUSTOM) //TODO: Does this apply for GLFW as well?
 		{
 			#if (OS == .WINDOWS) { glContext: *Windows.HGLRC; glDeviceContextHandle: Windows.HDC; }
 			#if (OS == .LINUX) { glContext: GLCContext; glContextConfig: GLXFBConfig; }
@@ -42,7 +49,7 @@ else { #assert(false); }
 		procedures: *GL_Procedures;
 	}
 }
-else #if (GRAPHICS_API == .D3D11)
+else #if (GYLIB_GRAPHICS_API == .D3D11)
 {
 	ConstantsBufferId :: *ID3D11Buffer;
 	ShaderId :: struct { vertId: *ID3D11VertexShader; pixId: *ID3D11PixelShader; layoutId: *ID3D11InputLayout; }
@@ -131,7 +138,7 @@ Texture :: struct
 	#place size; width, height: s32;
 }
 
-#if (GRAPHICS_API == .OPENGL)
+#if (GYLIB_GRAPHICS_API == .OPENGL)
 {
 	ShaderUniformLocations :: struct
 	{
@@ -149,10 +156,10 @@ Texture :: struct
 Shader :: struct
 {
 	id: ShaderId;
-	#if (GRAPHICS_API == .OPENGL) { uniforms: ShaderUniformLocations; }
+	#if (GYLIB_GRAPHICS_API == .OPENGL) { uniforms: ShaderUniformLocations; }
 }
 
-#if (GRAPHICS_API == .D3D11)
+#if (GYLIB_GRAPHICS_API == .D3D11)
 {
 	ShaderConstantsBuffer :: struct
 	{
@@ -185,20 +192,12 @@ Shader :: struct
 		
 		color1: v4;
 	}
-} //#if (GRAPHICS_API == .D3D11)
+} //#if (GYLIB_GRAPHICS_API == .D3D11)
 
 // +--------------------------------------------------------------+
 // |                           Globals                            |
 // +--------------------------------------------------------------+
-#if (GRAPHICS_API == .OPENGL)
-{
-	opengl: *GL_Procedures;
-}
-else #if (GRAPHICS_API == .D3D11)
-{
-	//TODO: Implement me?
-}
-else { #assert(false); }
+//NOTE: GL module has a global named "gl" that should be filled by the application!
 
 // +--------------------------------------------------------------+
 // |                      Texture Functions                       |
@@ -209,10 +208,10 @@ CreateTexture :: (graphicsContext: *GraphicsContext, output: *Texture, pixelData
 	NotNull(output);
 	ClearPointer(output);
 	
-	#if (GRAPHICS_API == .OPENGL)
+	#if (GYLIB_GRAPHICS_API == .OPENGL)
 	{
-		opengl.glGenTextures(1, *output.id);
-		opengl.glBindTexture(GL_TEXTURE_2D, output.id);
+		gl.glGenTextures(1, *output.id);
+		gl.glBindTexture(GL_TEXTURE_2D, output.id);
 		
 		dataFormat: GLenum;
 		internalFormat: GLint;
@@ -236,7 +235,7 @@ CreateTexture :: (graphicsContext: *GraphicsContext, output: *Texture, pixelData
 		}
 		else { Assert(false, "Unsupported pixelSize passed to CreateTexture"); }
 		
-		opengl.glTexImage2D(
+		gl.glTexImage2D(
 			target         = GL_TEXTURE_2D,
 			level          = 0,
 			internalformat = internalFormat,
@@ -248,20 +247,20 @@ CreateTexture :: (graphicsContext: *GraphicsContext, output: *Texture, pixelData
 			pixels         = pixelData.dataPntr
 		);
 		
-		opengl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, xx ifx options.pixelated then (ifx options.hasMipmap then GL_NEAREST_MIPMAP_NEAREST else GL_NEAREST) else (ifx options.hasMipmap then GL_LINEAR_MIPMAP_LINEAR else GL_LINEAR));
-		opengl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, xx ifx options.pixelated then GL_NEAREST else GL_LINEAR);
-		opengl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, xx ifx options.repeating then GL_REPEAT else GL_CLAMP_TO_EDGE);
-		opengl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, xx ifx options.repeating then GL_REPEAT else GL_CLAMP_TO_EDGE);
-		if (options.hasMipmap) { opengl.glGenerateMipmap(GL_TEXTURE_2D); }
+		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, xx ifx options.pixelated then (ifx options.hasMipmap then GL_NEAREST_MIPMAP_NEAREST else GL_NEAREST) else (ifx options.hasMipmap then GL_LINEAR_MIPMAP_LINEAR else GL_LINEAR));
+		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, xx ifx options.pixelated then GL_NEAREST else GL_LINEAR);
+		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, xx ifx options.repeating then GL_REPEAT else GL_CLAMP_TO_EDGE);
+		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, xx ifx options.repeating then GL_REPEAT else GL_CLAMP_TO_EDGE);
+		if (options.hasMipmap) { gl.glGenerateMipmap(GL_TEXTURE_2D); }
 		
 		if (pixelData.pixelSize == 1)
 		{
 			//TODO: This is not supported by WebGL! We need to figure out an alternative or only use this when running on OpenGL proper?
 			swizzleMask := GLint.[GL_ONE, GL_ONE, GL_ONE, GL_RED];
-			opengl.glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzleMask.data);
+			gl.glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzleMask.data);
 		}
 	}
-	else #if (GRAPHICS_API == .D3D11)
+	else #if (GYLIB_GRAPHICS_API == .D3D11)
 	{
 		format: DXGI_FORMAT;
 		if (pixelData.pixelSize == 1)
@@ -369,56 +368,56 @@ _CreateVertexBuffer :: (graphicsContext: *GraphicsContext, output: *VertexBuffer
 {
 	ClearPointer(output);
 	
-	#if (GRAPHICS_API == .OPENGL)
+	#if (GYLIB_GRAPHICS_API == .OPENGL)
 	{
 		output.vertexType = T;
 		output.vertexSize = size_of(T);
 		output.numVertices = vertices.count;
 		output.numIndices = indices.count;
 		
-		opengl.glGenVertexArrays(1, *output.id.vao);
-		opengl.glGenBuffers(1, *output.id.vbo);
-		opengl.glGenBuffers(1, *output.id.ebo);
+		gl.glGenVertexArrays(1, *output.id.vao);
+		gl.glGenBuffers(1, *output.id.vbo);
+		gl.glGenBuffers(1, *output.id.ebo);
 		// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-		opengl.glBindVertexArray(output.id.vao);
+		gl.glBindVertexArray(output.id.vao);
 		
-		opengl.glBindBuffer(GL_ARRAY_BUFFER, output.id.vbo);
-		opengl.glBufferData(GL_ARRAY_BUFFER, size_of(T) * vertices.count, vertices.data, GL_STATIC_DRAW);
+		gl.glBindBuffer(GL_ARRAY_BUFFER, output.id.vbo);
+		gl.glBufferData(GL_ARRAY_BUFFER, size_of(T) * vertices.count, vertices.data, GL_STATIC_DRAW);
 		
-		opengl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, output.id.ebo);
-		opengl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_of(u32) * indices.count, indices.data, GL_STATIC_DRAW);
+		gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, output.id.ebo);
+		gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_of(u32) * indices.count, indices.data, GL_STATIC_DRAW);
 		
 		// PrintLine_W("size_of(T) = %", size_of(T));
-		opengl.glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(0)); //position
-		opengl.glEnableVertexAttribArray(0);
+		gl.glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(0)); //position
+		gl.glEnableVertexAttribArray(0);
 		#if (T == Vertex2D || T == Vertex3D)
 		{
 			// WriteLine_W("Adding color and texCoord to VAO");
-			opengl.glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(size_of(v3))); //color
-			opengl.glEnableVertexAttribArray(1);
-			opengl.glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(size_of(v3) + size_of(v4))); //texCoord
-			opengl.glEnableVertexAttribArray(2);
+			gl.glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(size_of(v3))); //color
+			gl.glEnableVertexAttribArray(1);
+			gl.glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(size_of(v3) + size_of(v4))); //texCoord
+			gl.glEnableVertexAttribArray(2);
 		}
 		#if (T == Vertex3D)
 		{
 			// WriteLine_W("Adding normal to VAO");
-			opengl.glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(size_of(v3) + size_of(v4) + size_of(v2))); //normal
-			opengl.glEnableVertexAttribArray(3);
+			gl.glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, size_of(T), cast(*void)(size_of(v3) + size_of(v4) + size_of(v2))); //normal
+			gl.glEnableVertexAttribArray(3);
 		}
 		
 		// note that this is allowed, the call to glVertexAttribPointer registered id.vbo as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-		opengl.glBindBuffer(GL_ARRAY_BUFFER, 0); 
+		gl.glBindBuffer(GL_ARRAY_BUFFER, 0); 
 		
 		// remember: do NOT unbind the EBO while a vaoId is active as the bound element buffer object IS stored in the vaoId; keep the EBO bound.
-		//opengl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
 		// You can unbind the vaoId afterwards so other vaoId calls won't accidentally modify this vaoId, but this rarely happens. Modifying other
 		// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-		opengl.glBindVertexArray(0);
+		gl.glBindVertexArray(0);
 		
 		output.isIndexed = true;
 	}
-	else #if (GRAPHICS_API == .D3D11)
+	else #if (GYLIB_GRAPHICS_API == .D3D11)
 	{
 		output.vertexType = T;
 		output.vertexSize = size_of(T);
@@ -483,7 +482,7 @@ CreateVertexBuffer :: #bake_constants _CreateVertexBuffer(T=Vertex3D);
 CompileShader :: (graphicsContext: *GraphicsContext, output: *Shader, shaderSourceStr: string) -> bool
 {
 	ClearPointer(output);
-	#if (GRAPHICS_API == .OPENGL)
+	#if (GYLIB_GRAPHICS_API == .OPENGL)
 	{
 		success: GLint;
 		infoLog: [512]GLchar;
@@ -491,59 +490,59 @@ CompileShader :: (graphicsContext: *GraphicsContext, output: *Shader, shaderSour
 		vertexShaderSource, fragmentShaderSource := ShaderSourceSplit(shaderSourceStr);
 		
 		// vertex shader
-		vertexShader := opengl.glCreateShader(GL_VERTEX_SHADER);
-		defer opengl.glDeleteShader(vertexShader);
+		vertexShader := gl.glCreateShader(GL_VERTEX_SHADER);
+		defer gl.glDeleteShader(vertexShader);
 		vertexSourceCstr := cast(*GLchar)temp_c_string(vertexShaderSource);
 		vertexSourceLength := cast(GLint)vertexShaderSource.count;
-		opengl.glShaderSource(vertexShader, 1, *vertexSourceCstr, *vertexSourceLength);
-		opengl.glCompileShader(vertexShader);
+		gl.glShaderSource(vertexShader, 1, *vertexSourceCstr, *vertexSourceLength);
+		gl.glCompileShader(vertexShader);
 		// check for shader compile errors
-		opengl.glGetShaderiv(vertexShader, GL_COMPILE_STATUS, *success);
+		gl.glGetShaderiv(vertexShader, GL_COMPILE_STATUS, *success);
 		if (!success)
 		{
-			opengl.glGetShaderInfoLog(vertexShader, 512, null, infoLog.data);
+			gl.glGetShaderInfoLog(vertexShader, 512, null, infoLog.data);
 			PrintLine_E("Vertex Shader Compilation Failed!\n%", cast(string)infoLog);
 			return false;
 		}
 		
 		// fragment shader
-		fragmentShader := opengl.glCreateShader(GL_FRAGMENT_SHADER);
-		defer opengl.glDeleteShader(fragmentShader);
+		fragmentShader := gl.glCreateShader(GL_FRAGMENT_SHADER);
+		defer gl.glDeleteShader(fragmentShader);
 		fragmentSourceCstr := cast(*GLchar)temp_c_string(fragmentShaderSource);
 		fragmentSourceLength := cast(GLint)fragmentShaderSource.count;
-		opengl.glShaderSource(fragmentShader, 1, *fragmentSourceCstr, *fragmentSourceLength);
-		opengl.glCompileShader(fragmentShader);
+		gl.glShaderSource(fragmentShader, 1, *fragmentSourceCstr, *fragmentSourceLength);
+		gl.glCompileShader(fragmentShader);
 		// check for shader compile errors
-		opengl.glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, *success);
+		gl.glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, *success);
 		if (!success)
 		{
-			opengl.glGetShaderInfoLog(fragmentShader, 512, null, infoLog.data);
+			gl.glGetShaderInfoLog(fragmentShader, 512, null, infoLog.data);
 			PrintLine_E("Fragment Shader Compilation Failed!\n%", cast(string)infoLog);
 			return false;
 		}
 		
 		// link shaders
-		output.id = opengl.glCreateProgram();
-		opengl.glAttachShader(output.id, vertexShader);
-		opengl.glAttachShader(output.id, fragmentShader);
-		opengl.glLinkProgram(output.id);
+		output.id = gl.glCreateProgram();
+		gl.glAttachShader(output.id, vertexShader);
+		gl.glAttachShader(output.id, fragmentShader);
+		gl.glLinkProgram(output.id);
 		// check for linking errors
-		opengl.glGetProgramiv(output.id, GL_LINK_STATUS, *success);
+		gl.glGetProgramiv(output.id, GL_LINK_STATUS, *success);
 		if (!success)
 		{
-			opengl.glGetProgramInfoLog(output.id, 512, null, infoLog.data);
+			gl.glGetProgramInfoLog(output.id, 512, null, infoLog.data);
 			PrintLine_E("Shader Linking Failed!%", infoLog);
-			opengl.glDeleteProgram(output.id);
+			gl.glDeleteProgram(output.id);
 			return false;
 		}
 		
-		output.uniforms.worldMatrix      = opengl.glGetUniformLocation(output.id, "WorldMatrix");
-		output.uniforms.viewMatrix       = opengl.glGetUniformLocation(output.id, "ViewMatrix");
-		output.uniforms.projectionMatrix = opengl.glGetUniformLocation(output.id, "ProjectionMatrix");
-		output.uniforms.color            = opengl.glGetUniformLocation(output.id, "Color1");
-		output.uniforms.texture1         = opengl.glGetUniformLocation(output.id, "Texture1");
+		output.uniforms.worldMatrix      = gl.glGetUniformLocation(output.id, "WorldMatrix");
+		output.uniforms.viewMatrix       = gl.glGetUniformLocation(output.id, "ViewMatrix");
+		output.uniforms.projectionMatrix = gl.glGetUniformLocation(output.id, "ProjectionMatrix");
+		output.uniforms.color            = gl.glGetUniformLocation(output.id, "Color1");
+		output.uniforms.texture1         = gl.glGetUniformLocation(output.id, "Texture1");
 	}
-	else #if (GRAPHICS_API == .D3D11)
+	else #if (GYLIB_GRAPHICS_API == .D3D11)
 	{
 		// +==============================+
 		// |    Compile Vertex Shader     |
@@ -647,7 +646,7 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 	return vertexSource, fragmentSource;
 }
 
-#if (GRAPHICS_API == .D3D11)
+#if (GYLIB_GRAPHICS_API == .D3D11)
 {
 	D3D11_CompileShader :: (source: string, entryPoint: string, shaderModel: string) -> (string, Windows.HRESULT)
 	{
@@ -678,12 +677,12 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 		
 		return bytecode, compileResult;
 	}
-} //#if (GRAPHICS_API == .D3D11)
+} //#if (GYLIB_GRAPHICS_API == .D3D11)
 
 // +--------------------------------------------------------------+
 // |                  Constant Buffer Functions                   |
 // +--------------------------------------------------------------+
-#if (GRAPHICS_API == .D3D11)
+#if (GYLIB_GRAPHICS_API == .D3D11)
 {
 	GetConstantsBufferTypeSize :: (type: ConstantsBufferType, padToSixteen := false) -> s64
 	{
@@ -710,5 +709,4 @@ ShaderSourceSplit :: (sourceStr: string) -> (vertSource: string, fragSource: str
 		DebugAssert(output.id != null);
 		return (output.id != null);
 	}
-} //#if (GRAPHICS_API == .D3D11)
-
+} //#if (GYLIB_GRAPHICS_API == .D3D11)

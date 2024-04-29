@@ -202,25 +202,25 @@ TestMath :: ()
 {
 	print("v1: %\n", AngleFix(3*Pi64));
 	print("v2: %\n", AngleFix(4*Pi64 - 0.1));
-	assert(BasicallyEqual(AngleFix(3*Pi64), Pi64));
-	assert(BasicallyEqual(AngleFix(4*Pi64 - 0.1), TwoPi64 - 0.1));
-	assert(BasicallyEqual(AngleFix(4*Pi64 + 0.1), 0.1));
-	assert(BasicallyEqual(AngleFix(-Pi64), Pi64));
-	assert(BasicallyEqual(AngleFix(-3*Pi64), Pi64));
-	assert(BasicallyEqual(AngleFix(-0.1), TwoPi64 - 0.1));
+	Assert(BasicallyEqual(AngleFix(3*Pi64), Pi64));
+	Assert(BasicallyEqual(AngleFix(4*Pi64 - 0.1), TwoPi64 - 0.1));
+	Assert(BasicallyEqual(AngleFix(4*Pi64 + 0.1), 0.1));
+	Assert(BasicallyEqual(AngleFix(-Pi64), Pi64));
+	Assert(BasicallyEqual(AngleFix(-3*Pi64), Pi64));
+	Assert(BasicallyEqual(AngleFix(-0.1), TwoPi64 - 0.1));
 	
-	assert(BasicallyEqual(FractionalPart(10.1), 0.1));
-	assert(BasicallyEqual(FractionalPart(-10.1), 0.1));
+	Assert(BasicallyEqual(FractionalPart(10.1), 0.1));
+	Assert(BasicallyEqual(FractionalPart(-10.1), 0.1));
 	
-	assert(BasicallyEqual(AngleOpposite(Pi32 + 0.1), 0.1));
-	assert(BasicallyEqual(AngleFlipVertical(Pi32 + 0.1), Pi32 - 0.1));
-	assert(BasicallyEqual(AngleFlipVertical(Pi32 - 0.1), Pi32 + 0.1));
-	assert(BasicallyEqual(AngleFlipVertical(HalfPi32 - 0.1), ThreeHalfsPi32 + 0.1));
-	assert(BasicallyEqual(AngleFlipHorizontal(Pi32 + 0.1), TwoPi32 - 0.1));
-	assert(BasicallyEqual(AngleFlipHorizontal(Pi32 - 0.1), 0.1));
-	assert(BasicallyEqual(AngleFlipHorizontal(HalfPi32 - 0.1), HalfPi32 + 0.1));
-	assert(BasicallyEqual(AngleLerp(Pi32 - 0.1, 0.1, 0.5), HalfPi32));
-	assert(BasicallyEqual(AngleLerp(Pi32 - 0.1, TwoPi32 - 0.1, 0.5), ThreeHalfsPi32 - 0.1));
+	Assert(BasicallyEqual(AngleOpposite(Pi32 + 0.1), 0.1));
+	Assert(BasicallyEqual(AngleFlipVertical(Pi32 + 0.1), Pi32 - 0.1));
+	Assert(BasicallyEqual(AngleFlipVertical(Pi32 - 0.1), Pi32 + 0.1));
+	Assert(BasicallyEqual(AngleFlipVertical(HalfPi32 - 0.1), ThreeHalfsPi32 + 0.1));
+	Assert(BasicallyEqual(AngleFlipHorizontal(Pi32 + 0.1), TwoPi32 - 0.1));
+	Assert(BasicallyEqual(AngleFlipHorizontal(Pi32 - 0.1), 0.1));
+	Assert(BasicallyEqual(AngleFlipHorizontal(HalfPi32 - 0.1), HalfPi32 + 0.1));
+	Assert(BasicallyEqual(AngleLerp(Pi32 - 0.1, 0.1, 0.5), HalfPi32));
+	Assert(BasicallyEqual(AngleLerp(Pi32 - 0.1, TwoPi32 - 0.1, 0.5), ThreeHalfsPi32 - 0.1));
 	
 	if (false)
 	{

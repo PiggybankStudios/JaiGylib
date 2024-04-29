@@ -460,7 +460,7 @@ Vec2UnitCubeCornerFromIndex :: (cornerIndex: u64) -> v3
 // +--------------------------------------------------------------+
 Vec2Align :: (vectorPntr: *v2, alignmentScale: float32 = 1)
 {
-	assert(vectorPntr != null);
+	Assert(vectorPntr != null);
 	if (alignmentScale > 0)
 	{
 		vectorPntr.x = RoundF32(vectorPntr.x * alignmentScale) / alignmentScale;
@@ -469,7 +469,7 @@ Vec2Align :: (vectorPntr: *v2, alignmentScale: float32 = 1)
 }
 Vec3Align :: (vectorPntr: *v3, alignmentScale: float32 = 1)
 {
-	assert(vectorPntr != null);
+	Assert(vectorPntr != null);
 	if (alignmentScale > 0)
 	{
 		vectorPntr.x = RoundF32(vectorPntr.x * alignmentScale) / alignmentScale;
@@ -479,7 +479,7 @@ Vec3Align :: (vectorPntr: *v3, alignmentScale: float32 = 1)
 }
 Vec4Align :: (vectorPntr: *v4, alignmentScale: float32 = 1)
 {
-	assert(vectorPntr != null);
+	Assert(vectorPntr != null);
 	if (alignmentScale > 0)
 	{
 		vectorPntr.x = RoundF32(vectorPntr.x * alignmentScale) / alignmentScale;
@@ -495,86 +495,86 @@ Vec4Align :: (vectorPntr: *v4, alignmentScale: float32 = 1)
 TestVectors :: ()
 {
 	test2: v2;
-	assert(test2.x == 0 && test2.y == 0);
+	Assert(test2.x == 0 && test2.y == 0);
 	test2 = NewVec2(1, 2);
-	assert(test2 == v2.{ 1, 2 });
-	assert(test2.component[1] == 2);
+	Assert(test2 == v2.{ 1, 2 });
+	Assert(test2.component[1] == 2);
 	test2 = v2.{ 1, 2 } + v2.{ 4, 5 } - v2.{ 2, 1 };
-	assert(test2 == v2.{ 3, 6 });
+	Assert(test2 == v2.{ 3, 6 });
 	test2 = (v2.{ 1, 2 } * v2.{ 8, 8 }) / v2.{ 2, 4 };
-	assert(test2 == v2.{ 4, 4 });
-	assert(test2 * 3.5 == v2.{ 14, 14 });
-	assert(3.5 * test2 == v2.{ 14, 14 });
+	Assert(test2 == v2.{ 4, 4 });
+	Assert(test2 * 3.5 == v2.{ 14, 14 });
+	Assert(3.5 * test2 == v2.{ 14, 14 });
 	test2 = Vec2Fill(1);
-	assert(test2 == v2.{ 1, 1 });
+	Assert(test2 == v2.{ 1, 1 });
 	test2 = Vec2_Half;
-	assert(test2 == v2.{ 0.5, 0.5 });
-	assert(ToVec2(Vec2i_Right) == v2.{ 1, 0 });
+	Assert(test2 == v2.{ 0.5, 0.5 });
+	Assert(ToVec2(Vec2i_Right) == v2.{ 1, 0 });
 	test2 = v2.{ 1.3, 2.99 };
-	assert(Vec2Floor(test2) == v2.{ 1, 2 });
-	assert(Vec2Ceil(test2) == v2.{ 2, 3 });
-	assert(Vec2Round(test2) == v2.{ 1, 3 });
+	Assert(Vec2Floor(test2) == v2.{ 1, 2 });
+	Assert(Vec2Ceil(test2) == v2.{ 2, 3 });
+	Assert(Vec2Round(test2) == v2.{ 1, 3 });
 	Vec2Align(*test2);
-	assert(Vec2Max(v2.{ 1, 2 }, v2.{ 4, 0 }) == v2.{ 4, 2 });
-	assert(Vec2Min(v2.{ 1, 2 }, v2.{ 4, 0 }) == v2.{ 1, 0 });
-	assert(Vec2Abs(v2.{ -2, 5 }) == v2.{ 2, 5 });
-	assert(Vec2Add(v2.{ 1, -5 }, v2.{ 4, 2 }) == v2.{ 5, -3 });
-	assert(Vec2Dot(v2.{ 1, 0 }, v2.{ 1, 2 }) == 1);
-	assert(Vec2Length(v2.{ 3, 4 }) == 5);
-	assert(Vec2LengthSquared(v2.{ 3, 4 }) == 25);
-	assert(Vec2Normalize(v2.{ 0, 4 }) == v2.{ 0, 1 });
-	assert(Vec2Clamp(v2.{ 0, 4 }, v2.{ -3, 5 }, v2.{ -1, 10 }) == v2.{ -1, 5 });
-	assert(Vec2Lerp(v2.{ 0, 4 }, v2.{ -4, 5 }, 0.5) == v2.{ -2, 4.5 });
+	Assert(Vec2Max(v2.{ 1, 2 }, v2.{ 4, 0 }) == v2.{ 4, 2 });
+	Assert(Vec2Min(v2.{ 1, 2 }, v2.{ 4, 0 }) == v2.{ 1, 0 });
+	Assert(Vec2Abs(v2.{ -2, 5 }) == v2.{ 2, 5 });
+	Assert(Vec2Add(v2.{ 1, -5 }, v2.{ 4, 2 }) == v2.{ 5, -3 });
+	Assert(Vec2Dot(v2.{ 1, 0 }, v2.{ 1, 2 }) == 1);
+	Assert(Vec2Length(v2.{ 3, 4 }) == 5);
+	Assert(Vec2LengthSquared(v2.{ 3, 4 }) == 25);
+	Assert(Vec2Normalize(v2.{ 0, 4 }) == v2.{ 0, 1 });
+	Assert(Vec2Clamp(v2.{ 0, 4 }, v2.{ -3, 5 }, v2.{ -1, 10 }) == v2.{ -1, 5 });
+	Assert(Vec2Lerp(v2.{ 0, 4 }, v2.{ -4, 5 }, 0.5) == v2.{ -2, 4.5 });
 	
 	test2i: v2i;
-	assert(test2i.x == 0 && test2i.y == 0);
+	Assert(test2i.x == 0 && test2i.y == 0);
 	test2i = NewVec2i(1, 2);
-	assert(test2i == v2i.{ 1, 2 });
-	assert(test2i.component[1] == 2);
+	Assert(test2i == v2i.{ 1, 2 });
+	Assert(test2i.component[1] == 2);
 	test2i = v2i.{ 1, 2 } + v2i.{ 4, 5 } - v2i.{ 2, 1 };
-	assert(test2i == v2i.{ 3, 6 });
+	Assert(test2i == v2i.{ 3, 6 });
 	test2i = (v2i.{ 1, 2 } * v2i.{ 8, 8 }) / v2i.{ 2, 4 };
-	assert(test2i == v2i.{ 4, 4 });
-	assert(test2i * 3 == v2i.{ 12, 12 });
-	assert(3 * test2i == v2i.{ 12, 12 });
+	Assert(test2i == v2i.{ 4, 4 });
+	Assert(test2i * 3 == v2i.{ 12, 12 });
+	Assert(3 * test2i == v2i.{ 12, 12 });
 	test2i = Vec2iFill(1);
-	assert(test2i == v2i.{ 1, 1 });
+	Assert(test2i == v2i.{ 1, 1 });
 	test2i = Vec2i_Right;
-	assert(test2i == v2i.{ 1, 0 });
-	assert(Vec2iMax(v2i.{ 1, 2 }, v2i.{ 4, 0 }) == v2i.{ 4, 2 });
-	assert(Vec2iMin(v2i.{ 1, 2 }, v2i.{ 4, 0 }) == v2i.{ 1, 0 });
-	assert(Vec2iAbs(v2i.{ -2, 5 }) == v2i.{ 2, 5 });
-	assert(Vec2iAdd(v2i.{ 1, -5 }, v2i.{ 4, 2 }) == v2i.{ 5, -3 });
-	assert(Vec2iDot(v2i.{ 1, 0 }, v2i.{ 1, 2 }) == 1);
-	assert(Vec2iLengthSquared(v2i.{ 3, 4 }) == 25);
+	Assert(test2i == v2i.{ 1, 0 });
+	Assert(Vec2iMax(v2i.{ 1, 2 }, v2i.{ 4, 0 }) == v2i.{ 4, 2 });
+	Assert(Vec2iMin(v2i.{ 1, 2 }, v2i.{ 4, 0 }) == v2i.{ 1, 0 });
+	Assert(Vec2iAbs(v2i.{ -2, 5 }) == v2i.{ 2, 5 });
+	Assert(Vec2iAdd(v2i.{ 1, -5 }, v2i.{ 4, 2 }) == v2i.{ 5, -3 });
+	Assert(Vec2iDot(v2i.{ 1, 0 }, v2i.{ 1, 2 }) == 1);
+	Assert(Vec2iLengthSquared(v2i.{ 3, 4 }) == 25);
 	
 	test3: v3;
-	assert(test3 == v3.{ 0, 0, 0 });
+	Assert(test3 == v3.{ 0, 0, 0 });
 	test3 = NewVec3(3, 4, 5);
-	assert(test3 == v3.{ 3, 4, 5 });
-	assert(test3.xy == v2.{ 3, 4 });
-	assert(test3.yz == v2.{ 4, 5 });
-	assert(test3.component[1] == 4);
+	Assert(test3 == v3.{ 3, 4, 5 });
+	Assert(test3.xy == v2.{ 3, 4 });
+	Assert(test3.yz == v2.{ 4, 5 });
+	Assert(test3.component[1] == 4);
 	test3 = Vec3Fill(5);
-	assert(test3 == v3.{ 5, 5, 5 });
+	Assert(test3 == v3.{ 5, 5, 5 });
 	test3 = Vec3_Half;
-	assert(test3 == v3.{ 0.5, 0.5, 0.5 });
-	assert(Vec3Dot(v3.{ 1, 0, 0 }, v3.{ 1, 2, 0 }) == 1);
-	assert(Vec2iLength(v2i.{ 3, 4 }) == 5);
+	Assert(test3 == v3.{ 0.5, 0.5, 0.5 });
+	Assert(Vec3Dot(v3.{ 1, 0, 0 }, v3.{ 1, 2, 0 }) == 1);
+	Assert(Vec2iLength(v2i.{ 3, 4 }) == 5);
 	
 	test4: v4;
-	assert(test4.x == 0 && test4.y == 0);
+	Assert(test4.x == 0 && test4.y == 0);
 	test4 = NewVec4(6, 7, 8, 9);
-	assert(test4.x == 6 && test4.y == 7 && test4.z == 8 && test4.w == 9);
-	assert(test4.xy == v2.{ 6, 7 });
-	assert(test4.yz == v2.{ 7, 8 });
-	assert(test4.zw == v2.{ 8, 9 });
-	assert(test4.xyz == v3.{ 6, 7, 8 });
-	assert(test4.yzw == v3.{ 7, 8, 9 });
-	assert(test4.component[1] == 7);
+	Assert(test4.x == 6 && test4.y == 7 && test4.z == 8 && test4.w == 9);
+	Assert(test4.xy == v2.{ 6, 7 });
+	Assert(test4.yz == v2.{ 7, 8 });
+	Assert(test4.zw == v2.{ 8, 9 });
+	Assert(test4.xyz == v3.{ 6, 7, 8 });
+	Assert(test4.yzw == v3.{ 7, 8, 9 });
+	Assert(test4.component[1] == 7);
 	test4 = Vec4Fill(8);
-	assert(test4 == v4.{ 8, 8, 8, 8 });
+	Assert(test4 == v4.{ 8, 8, 8, 8 });
 	test4 = Vec4_Half;
-	assert(test4 == v4.{ 0.5, 0.5, 0.5, 0.5 });
+	Assert(test4 == v4.{ 0.5, 0.5, 0.5, 0.5 });
 }
 // #if GYLIB_RUN_TESTS { #run TestVectors(); }

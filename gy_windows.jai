@@ -5,15 +5,15 @@
 #if (OS == .WINDOWS) { Windows :: #import "Windows"; }
 else { Linux :: #import "POSIX"; }
 
-#if (WINDOW_API == .SDL) { #import "SDL"; }
-else #if (WINDOW_API == .GLFW)
+#if (GYLIB_WINDOW_API == .SDL) { SDL :: #import "SDL"; }
+else #if (GYLIB_WINDOW_API == .GLFW)
 {
-	#import "glfw"(
+	GLFW :: #import "glfw"(
 		GLFW_EXPOSE_NATIVE_WIN32 = (OS == .WINDOWS),
-		GLFW_EXPOSE_VULKAN = (GRAPHICS_API == .VULKAN)
+		GLFW_EXPOSE_VULKAN = (GYLIB_GRAPHICS_API == .VULKAN)
 	);
 }
-else #if (WINDOW_API == .CUSTOM)
+else #if (GYLIB_WINDOW_API == .CUSTOM)
 {
 	#import "Window_Creation";
 	#import "Input";
@@ -23,15 +23,15 @@ else { #assert(false); }
 // +--------------------------------------------------------------+
 // |                         Type Aliases                         |
 // +--------------------------------------------------------------+
-#if (WINDOW_API == .SDL)
+#if (GYLIB_WINDOW_API == .SDL)
 {
-	WindowHandle :: *SDL_Window;
+	WindowHandle :: *SDL.SDL_Window;
 }
-else #if (WINDOW_API == .GLFW)
+else #if (GYLIB_WINDOW_API == .GLFW)
 {
-	WindowHandle :: *GLFWwindow;
+	WindowHandle :: *GLFW.GLFWwindow;
 }
-else #if (WINDOW_API == .CUSTOM)
+else #if (GYLIB_WINDOW_API == .CUSTOM)
 {
 	WindowHandle :: Window_Type;
 }

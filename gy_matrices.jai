@@ -518,14 +518,14 @@ TestMatrices :: ()
 		1, 1, 2, 1,
 		2, 1, 1, 1
 	);
-	assert(Mat4Determinant(identity) == 1);
-	assert(identity * identity == identity);
-	assert(test1 * identity == test1);
-	assert(identity * test1 == test1);
-	assert(test1 * test2 == Mat4Multiply(test1, test2));
-	assert(test2 * test1 == Mat4Multiply(test2, test1));
-	assert(Mat4Determinant(test1) == 0);
-	assert(Mat4MultiplyVec3(identity, v3.{1, 2, 3}) == v3.{1, 2, 3});
+	Assert(Mat4Determinant(identity) == 1);
+	Assert(identity * identity == identity);
+	Assert(test1 * identity == test1);
+	Assert(identity * test1 == test1);
+	Assert(test1 * test2 == Mat4Multiply(test1, test2));
+	Assert(test2 * test1 == Mat4Multiply(test2, test1));
+	Assert(Mat4Determinant(test1) == 0);
+	Assert(Mat4MultiplyVec3(identity, v3.{1, 2, 3}) == v3.{1, 2, 3});
 	print("test2: %\n", test2);
 	print("Mat4Multiply(test1, test1): %\n", Mat4Transpose(Mat4Multiply(test1, test1)));
 }

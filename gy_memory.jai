@@ -1844,8 +1844,8 @@ PrintInArena :: PrintInArenaUsingTemp;
 TestMemory :: ()
 {
 	CreateBufferArenaOnStack("testArena", "testBuffer", 64);
-	assert(testBuffer.count == 64);
-	assert(testArena.size == 64);
+	Assert(testBuffer.count == 64);
+	Assert(testArena.size == 64);
 	
 	memory: [1024]u8;
 	arena: MemArena;
@@ -1870,10 +1870,10 @@ TestMemory :: ()
 	// print("FreeMem(allocedStruct): %, %\n", freeSuccess, freeSize);
 	// print("arena.used: %\n", arena.used);
 	freeSuccess, freeSize = FreeMem(*arena, alloc1);
-	assert(freeSize == 36);
+	Assert(freeSize == 36);
 	// print("FreeMem(alloc1): %, %\n", freeSuccess, freeSize);
 	// print("arena.used: %\n", arena.used);
-	assert(arena.used == initialArenaUsed);
+	Assert(arena.used == initialArenaUsed);
 	
 	bufferArena := AllocBufferArena(*arena, 128);
 	// print("bufferArena: %\n", bufferArena);
@@ -1886,7 +1886,7 @@ TestMemory :: ()
 	// print("bufferArena.used: %\n", bufferArena.used);
 	FreeBufferArena(*bufferArena, *arena);
 	// print("arena.used: %\n", arena.used);
-	assert(arena.used == initialArenaUsed);
+	Assert(arena.used == initialArenaUsed);
 	
 	// printBuffer: [128]u8;
 	// print("Before print: %/%\n", arena.used, arena.size);
@@ -1900,7 +1900,7 @@ TestMemory :: ()
 	// print("Result: \"%\" (% in arena starting at %)\n", testPrint, testPrint.data, arena.mainBytePntr);
 	// print("After print: %/%\n", arena.used, arena.size);
 	// _, printSize := FreeString(*arena, *testPrint);
-	// assert(cast(s64)printSize == testPrint.count);
+	// Assert(cast(s64)printSize == testPrint.count);
 	// print("The print was % bytes\n", printSize);
 	// print("After print free: %/%\n", arena.used, arena.size);
 	// print("printBuffer: [");
@@ -1914,11 +1914,11 @@ TestMemory :: ()
 	InitMemArena_MarkedStack(*tempArena, memory.count, memory.data, 4);
 	// print("tempArena: %\n", tempArena);
 	PushMemMark(*tempArena);
-	assert(GetNumMarks(*tempArena) == 1);
+	Assert(GetNumMarks(*tempArena) == 1);
 	alloc1 = AllocMem(*tempArena, 64);
-	assert(tempArena.used == 64);
+	Assert(tempArena.used == 64);
 	PopMemMark(*tempArena);
-	assert(GetNumMarks(*tempArena) == 0);
-	assert(tempArena.used == 0);
+	Assert(GetNumMarks(*tempArena) == 0);
+	Assert(tempArena.used == 0);
 }
 // #if GYLIB_RUN_TESTS { #run TestMemory(); }
